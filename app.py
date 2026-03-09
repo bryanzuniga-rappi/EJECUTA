@@ -11,8 +11,72 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
-st.set_page_config(page_title="Data Sync", layout="wide")
+# --- CONFIGURACIÓN DE PÁGINA ---
+st.set_page_config(page_title="Data Sync Pro", page_icon="🚀", layout="wide")
 
+# --- DISEÑO PROFESIONAL (CSS CUSTOM) ---
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    /* Fuente Global */
+    html, body, [class*="css"], .stButton > button {
+        font-family: 'Poppins', sans-serif !important;
+    }
+
+    /* Fondo y Título */
+    .main {
+        background-color: #0e1117;
+    }
+    h1 {
+        color: #FFFFFF;
+        font-weight: 600 !important;
+        letter-spacing: -1px;
+    }
+
+    /* Estilo de Botón Maestro (EJECUTA TODO) */
+    div.stButton > button:first-child {
+        background-color: #FF4B4B;
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #FF2B2B;
+        transform: scale(1.01);
+        box-shadow: 0 4px 15px rgba(255, 75, 75, 0.4);
+    }
+
+    /* Estilo de Botones Individuales */
+    div.stButton > button {
+        background-color: #262730;
+        color: #E0E0E0;
+        border: 1px solid #3d414b;
+        border-radius: 8px;
+        font-weight: 400;
+        transition: all 0.2s ease;
+    }
+    div.stButton > button:hover {
+        border-color: #FF4B4B;
+        color: #FF4B4B;
+        background-color: #1e1f26;
+    }
+    
+    /* Divider Personalizado */
+    hr {
+        margin: 2em 0;
+        border: 0;
+        border-top: 1px solid #3d414b;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- ESTRUCTURA DE DATOS (SIN CAMBIOS) ---
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
     'account': 'hg51401',
@@ -260,6 +324,7 @@ TAREAS = [
     }
 ]
 
+# --- FUNCIONES CORE (SIN CAMBIOS) ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
@@ -295,15 +360,14 @@ def run_task(t, drive_service, gc, cs):
     except Exception as e:
         return False, str(e)
 
-# --- INICIO ---
-st.title("Dashboard de ejecución SnowFlake")
+# --- FLUJO PRINCIPAL ---
+st.write("### 🚀 Data Sync Engine")
+st.title("Snowflake ➔ Google Sheets")
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
-    # Limpiamos el Base64 de posibles espacios
     encoded_json = st.secrets["GOOGLE_BASE64"].strip()
     
-    # Decodificar y cargar JSON
     decoded_bytes = base64.b64decode(encoded_json)
     google_info = json.loads(decoded_bytes.decode('utf-8'))
     
@@ -313,30 +377,35 @@ try:
     gc = gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    if st.button("EJECUTA TODO", use_container_width=True):
-        with st.status("Executing...") as status:
-            conn = snowflake.connector.connect(**SF_PARAMS)
-            cs = conn.cursor()
-            for t in TAREAS:
-                st.write(f"Syncing {t['tab']}...")
-                success, msg = run_task(t, drive_service, gc, cs)
-                if not success: st.error(f"{t['tab']}: {msg}")
-            cs.close()
-            conn.close()
-            status.update(label="FINISHED", state="complete")
+    # Sección Principal de Control
+    with st.container():
+        if st.button("⚡ EJECUTAR PIPELINE COMPLETO", use_container_width=True):
+            with st.status("Procesando todas las tareas...", expanded=True) as status:
+                conn = snowflake.connector.connect(**SF_PARAMS)
+                cs = conn.cursor()
+                for t in TAREAS:
+                    st.write(f"🔄 Sincronizando: **{t['tab']}**")
+                    success, msg = run_task(t, drive_service, gc, cs)
+                    if not success: st.error(f"❌ {t['tab']}: {msg}")
+                cs.close()
+                conn.close()
+                status.update(label="✅ Sincronización terminada con éxito", state="complete")
 
-    st.divider()
+    st.markdown("---")
+    st.write("### 🛠️ Tareas Individuales")
+    
+    # Cuadrícula de tareas
     cols = st.columns(4)
     for i, t in enumerate(TAREAS):
         with cols[i % 4]:
-            if st.button(t['tab'], key=f"btn_{i}", use_container_width=True):
-                with st.spinner("Wait..."):
+            if st.button(f"📥 {t['tab']}", key=f"btn_{i}", use_container_width=True):
+                with st.spinner("Conectando..."):
                     conn = snowflake.connector.connect(**SF_PARAMS)
                     cs = conn.cursor()
                     success, msg = run_task(t, drive_service, gc, cs)
                     cs.close()
                     conn.close()
-                    if success: st.toast(msg)
+                    if success: st.toast(f"✅ {msg}", icon='🔥')
                     else: st.error(msg)
 except Exception as e:
-    st.error(f"Initialization Error: {e}")
+    st.error(f"🚨 Initialization Error: {e}")
