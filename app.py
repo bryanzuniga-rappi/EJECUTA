@@ -296,7 +296,7 @@ def run_task(t, drive_service, gc, cs):
         return False, str(e)
 
 # --- INICIO ---
-st.title("Data Pipeline Dashboard")
+st.title("Dashboard de ejecución SnowFlake")
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -313,7 +313,7 @@ try:
     gc = gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    if st.button("RUN ALL TASKS", use_container_width=True):
+    if st.button("EJECUTA TODO", use_container_width=True):
         with st.status("Executing...") as status:
             conn = snowflake.connector.connect(**SF_PARAMS)
             cs = conn.cursor()
