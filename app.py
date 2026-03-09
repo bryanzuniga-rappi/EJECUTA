@@ -2,16 +2,15 @@ import streamlit as st
 import pandas as pd
 import gspread
 from gspread_dataframe import set_with_dataframe
-import os
 import io
 import snowflake.connector
 import json
 import time
+import base64
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
-# Configuración de página
 st.set_page_config(page_title="Data Sync", layout="wide")
 
 SF_PARAMS = {
@@ -264,11 +263,7 @@ TAREAS = [
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
-        results = drive_service.files().list(
-            q=query, spaces='drive', corpora='allDrives',
-            includeItemsFromAllDrives=True, supportsAllDrives=True,
-            fields='files(id, name)'
-        ).execute()
+        results = drive_service.files().list(q=query, spaces='drive', corpora='allDrives', includeItemsFromAllDrives=True, supportsAllDrives=True, fields='files(id, name)').execute()
         items = results.get('files', [])
         if not items: return None
         file_id = items[0]['id']
@@ -276,8 +271,7 @@ def get_sql_content(drive_service, file_name):
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
         done = False
-        while done is False:
-            status, done = downloader.next_chunk()
+        while done is False: _, done = downloader.next_chunk()
         return fh.getvalue().decode('utf-8')
     except Exception as e:
         st.error(f"Error Drive {file_name}: {e}")
@@ -288,15 +282,12 @@ def run_task(t, drive_service, gc, cs):
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
         if not query: return False, "SQL no encontrado"
-        
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
-        
         try:
             wks = sh.worksheet(t["tab"])
         except gspread.exceptions.WorksheetNotFound:
             wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
-            
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
@@ -304,53 +295,48 @@ def run_task(t, drive_service, gc, cs):
     except Exception as e:
         return False, str(e)
 
-# --- INTERFAZ ---
-st.title("Data Pipeline")
+# --- INICIO ---
+st.title("Data Pipeline Dashboard")
 
-# CARGA DE SECRETOS (AJUSTADA PARA EVITAR EL ERROR DE ESCAPE)
 try:
-    sf_token = st.secrets.get("SNOWFLAKE_TOKEN")
-    google_json = st.secrets.get("GOOGLE_JSON_KEY")
+    sf_token = st.secrets["SNOWFLAKE_TOKEN"]
+    # Limpiamos el Base64 de posibles espacios
+    encoded_json = st.secrets["GOOGLE_BASE64"].strip()
+    
+    # Decodificar y cargar JSON
+    decoded_bytes = base64.b64decode(encoded_json)
+    google_info = json.loads(decoded_bytes.decode('utf-8'))
+    
+    scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
+    creds = Credentials.from_service_account_info(google_info, scopes=scopes)
+    drive_service = build('drive', 'v3', credentials=creds)
+    gc = gspread.authorize(creds)
+    SF_PARAMS['password'] = sf_token
 
-    if sf_token and google_json:
-        # strict=False permite caracteres de control como \n en el JSON
-        google_info = json.loads(google_json, strict=False)
-        scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
-        creds = Credentials.from_service_account_info(google_info, scopes=scopes)
-        drive_service = build('drive', 'v3', credentials=creds)
-        gc = gspread.authorize(creds)
-        SF_PARAMS['password'] = sf_token
+    if st.button("RUN ALL TASKS", use_container_width=True):
+        with st.status("Executing...") as status:
+            conn = snowflake.connector.connect(**SF_PARAMS)
+            cs = conn.cursor()
+            for t in TAREAS:
+                st.write(f"Syncing {t['tab']}...")
+                success, msg = run_task(t, drive_service, gc, cs)
+                if not success: st.error(f"{t['tab']}: {msg}")
+            cs.close()
+            conn.close()
+            status.update(label="FINISHED", state="complete")
 
-        # BOTÓN MAESTRO
-        if st.button("RUN ALL TASKS", use_container_width=True):
-            with st.status("Executing...") as status:
-                conn = snowflake.connector.connect(**SF_PARAMS)
-                cs = conn.cursor()
-                for t in TAREAS:
-                    st.write(f"Syncing {t['tab']}...")
+    st.divider()
+    cols = st.columns(4)
+    for i, t in enumerate(TAREAS):
+        with cols[i % 4]:
+            if st.button(t['tab'], key=f"btn_{i}", use_container_width=True):
+                with st.spinner("Wait..."):
+                    conn = snowflake.connector.connect(**SF_PARAMS)
+                    cs = conn.cursor()
                     success, msg = run_task(t, drive_service, gc, cs)
-                    if not success: st.error(f"{t['tab']}: {msg}")
-                cs.close()
-                conn.close()
-                status.update(label="FINISHED", state="complete")
-
-        st.divider()
-
-        # BOTONES INDIVIDUALES
-        cols = st.columns(4)
-        for i, t in enumerate(TAREAS):
-            with cols[i % 4]:
-                if st.button(t['tab'], key=f"btn_{i}", use_container_width=True):
-                    with st.spinner(f"Updating {t['tab']}..."):
-                        conn = snowflake.connector.connect(**SF_PARAMS)
-                        cs = conn.cursor()
-                        success, msg = run_task(t, drive_service, gc, cs)
-                        cs.close()
-                        conn.close()
-                        if success: st.toast(msg)
-                        else: st.error(msg)
-    else:
-        st.warning("Please configure Secrets in Streamlit Settings.")
-
+                    cs.close()
+                    conn.close()
+                    if success: st.toast(msg)
+                    else: st.error(msg)
 except Exception as e:
     st.error(f"Initialization Error: {e}")
