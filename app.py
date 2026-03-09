@@ -11,7 +11,7 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
-# Configuracion de pagina
+# Configuración de página
 st.set_page_config(page_title="Data Sync", layout="wide")
 
 SF_PARAMS = {
@@ -304,34 +304,26 @@ def run_task(t, drive_service, gc, cs):
     except Exception as e:
         return False, str(e)
 
-# Interfaz
+# --- INTERFAZ ---
 st.title("Data Pipeline")
 
-# Carga automatica de Secretos desde Settings
-sf_token = st.secrets.get("SNOWFLAKE_TOKEN")
-google_json = st.secrets.get("GOOGLE_JSON_KEY")
+# CARGA DE SECRETOS (AJUSTADA PARA EVITAR EL ERROR DE ESCAPE)
+try:
+    sf_token = st.secrets.get("SNOWFLAKE_TOKEN")
+    google_json = st.secrets.get("GOOGLE_JSON_KEY")
 
-with st.sidebar:
-    st.subheader("Credentials Status")
     if sf_token and google_json:
-        st.success("Secrets loaded from Settings")
-    else:
-        st.error("Missing Secrets in Settings")
-        # Backup: manual input si fallan los secretos
-        sf_token = st.text_input("Snowflake Token", type="password")
-        google_json = st.text_area("Google JSON Key")
-
-if sf_token and google_json:
-    try:
-        creds_info = json.loads(google_json)
+        # strict=False permite caracteres de control como \n en el JSON
+        google_info = json.loads(google_json, strict=False)
         scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
-        creds = Credentials.from_service_account_info(creds_info, scopes=scopes)
+        creds = Credentials.from_service_account_info(google_info, scopes=scopes)
         drive_service = build('drive', 'v3', credentials=creds)
         gc = gspread.authorize(creds)
         SF_PARAMS['password'] = sf_token
 
+        # BOTÓN MAESTRO
         if st.button("RUN ALL TASKS", use_container_width=True):
-            with st.status("Executing pipeline...") as status:
+            with st.status("Executing...") as status:
                 conn = snowflake.connector.connect(**SF_PARAMS)
                 cs = conn.cursor()
                 for t in TAREAS:
@@ -344,7 +336,7 @@ if sf_token and google_json:
 
         st.divider()
 
-        # Botones individuales en cuadricula
+        # BOTONES INDIVIDUALES
         cols = st.columns(4)
         for i, t in enumerate(TAREAS):
             with cols[i % 4]:
@@ -357,7 +349,8 @@ if sf_token and google_json:
                         conn.close()
                         if success: st.toast(msg)
                         else: st.error(msg)
-    except Exception as e:
-        st.error(f"Initialization Error: {e}")
-else:
-    st.warning("Please configure Secrets in Streamlit Settings.")
+    else:
+        st.warning("Please configure Secrets in Streamlit Settings.")
+
+except Exception as e:
+    st.error(f"Initialization Error: {e}")
