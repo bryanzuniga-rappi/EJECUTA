@@ -12,71 +12,72 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 # --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="Data Sync Pro", page_icon="🚀", layout="wide")
+st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide")
 
-# --- DISEÑO PROFESIONAL (CSS CUSTOM) ---
+# --- DISEÑO PROFESIONAL AZUL SNOWFLAKE (CSS) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-    /* Fuente Global */
-    html, body, [class*="css"], .stButton > button {
+    /* Aplicar Poppins a todo */
+    html, body, [class*="css"], .stButton > button, .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
     }
 
-    /* Fondo y Título */
     .main {
         background-color: #0e1117;
     }
-    h1 {
-        color: #FFFFFF;
-        font-weight: 600 !important;
-        letter-spacing: -1px;
-    }
 
-    /* Estilo de Botón Maestro (EJECUTA TODO) */
+    /* Botón Maestro (Azul Snowflake) */
     div.stButton > button:first-child {
-        background-color: #FF4B4B;
-        color: white;
-        border: none;
-        font-weight: 600;
-        padding: 0.75rem 1rem;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    div.stButton > button:first-child:hover {
-        background-color: #FF2B2B;
-        transform: scale(1.01);
-        box-shadow: 0 4px 15px rgba(255, 75, 75, 0.4);
-    }
-
-    /* Estilo de Botones Individuales */
-    div.stButton > button {
-        background-color: #262730;
-        color: #E0E0E0;
-        border: 1px solid #3d414b;
-        border-radius: 8px;
-        font-weight: 400;
-        transition: all 0.2s ease;
-    }
-    div.stButton > button:hover {
-        border-color: #FF4B4B;
-        color: #FF4B4B;
-        background-color: #1e1f26;
+        background-color: #29b5e8 !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 600 !important;
+        padding: 0.8rem 1rem !important;
+        border-radius: 12px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        width: 100% !important;
     }
     
-    /* Divider Personalizado */
-    hr {
-        margin: 2em 0;
-        border: 0;
-        border-top: 1px solid #3d414b;
+    div.stButton > button:first-child:hover {
+        background-color: #1a9bc9 !important;
+        box-shadow: 0 4px 15px rgba(41, 181, 232, 0.4) !important;
+    }
+
+    /* Botones de Tareas Individuales (Borde Azul) */
+    div.stButton > button {
+        background-color: #1e2229 !important;
+        color: #FFFFFF !important;
+        border: 2px solid #29b5e8 !important;
+        border-radius: 10px !important;
+        height: 3.5em !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    div.stButton > button:hover {
+        background-color: #29b5e8 !important;
+        color: white !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Estilo de los Expanders (Mundos) */
+    .stExpander {
+        border: 1px solid #29b5e8 !important;
+        border-radius: 12px !important;
+        background-color: #161b22 !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .stExpander p {
+        font-weight: 600 !important;
+        color: #29b5e8 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS (SIN CAMBIOS) ---
+# --- ESTRUCTURA DE DATOS (SIN ALTERACIONES) ---
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
     'account': 'hg51401',
@@ -324,7 +325,7 @@ TAREAS = [
     }
 ]
 
-# --- FUNCIONES CORE (SIN CAMBIOS) ---
+# --- FUNCIONES CORE ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
@@ -360,14 +361,13 @@ def run_task(t, drive_service, gc, cs):
     except Exception as e:
         return False, str(e)
 
-# --- FLUJO PRINCIPAL ---
-st.write("### 🚀 Data Sync Engine")
-st.title("Snowflake ➔ Google Sheets")
+# --- INICIO DE INTERFAZ ---
+st.title("❄️ Snowflake Data Sync Pro")
+st.write("Panel profesional de gestión de datos para Rappi.")
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
     encoded_json = st.secrets["GOOGLE_BASE64"].strip()
-    
     decoded_bytes = base64.b64decode(encoded_json)
     google_info = json.loads(decoded_bytes.decode('utf-8'))
     
@@ -377,35 +377,48 @@ try:
     gc = gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # Sección Principal de Control
-    with st.container():
-        if st.button("⚡ EJECUTAR PIPELINE COMPLETO", use_container_width=True):
-            with st.status("Procesando todas las tareas...", expanded=True) as status:
-                conn = snowflake.connector.connect(**SF_PARAMS)
-                cs = conn.cursor()
-                for t in TAREAS:
-                    st.write(f"🔄 Sincronizando: **{t['tab']}**")
-                    success, msg = run_task(t, drive_service, gc, cs)
-                    if not success: st.error(f"❌ {t['tab']}: {msg}")
-                cs.close()
-                conn.close()
-                status.update(label="✅ Sincronización terminada con éxito", state="complete")
+    # BOTÓN MAESTRO (TOTALMENTE AZUL)
+    if st.button("🚀 EJECUTAR PIPELINE COMPLETO"):
+        with st.status("Procesando todas las tareas...", expanded=True) as status:
+            conn = snowflake.connector.connect(**SF_PARAMS)
+            cs = conn.cursor()
+            for t in TAREAS:
+                st.write(f"🔄 Sincronizando: **{t['tab']}**")
+                success, msg = run_task(t, drive_service, gc, cs)
+                if not success: st.error(f"❌ {t['tab']}: {msg}")
+            cs.close()
+            conn.close()
+            status.update(label="✅ Sincronización terminada con éxito", state="complete")
 
     st.markdown("---")
-    st.write("### 🛠️ Tareas Individuales")
-    
-    # Cuadrícula de tareas
-    cols = st.columns(4)
-    for i, t in enumerate(TAREAS):
-        with cols[i % 4]:
-            if st.button(f"📥 {t['tab']}", key=f"btn_{i}", use_container_width=True):
-                with st.spinner("Conectando..."):
-                    conn = snowflake.connector.connect(**SF_PARAMS)
-                    cs = conn.cursor()
-                    success, msg = run_task(t, drive_service, gc, cs)
-                    cs.close()
-                    conn.close()
-                    if success: st.toast(f"✅ {msg}", icon='🔥')
-                    else: st.error(msg)
+
+    # --- LÓGICA DE AGRUPACIÓN POR MUNDOS (ID DE SHEET) ---
+    mundos = {}
+    for tarea in TAREAS:
+        s_id = tarea["sheet"]
+        if s_id not in mundos:
+            mundos[s_id] = []
+        mundos[s_id].append(tarea)
+
+    # --- RENDERIZADO POR EXPANDERS (MUNDOS) ---
+    for num, (sheet_id, lista_tareas) in enumerate(mundos.items(), 1):
+        # Identificamos el mundo con un número y el ID abreviado
+        with st.expander(f"📁 Mundo {num} - Sheet ID: {sheet_id[:10]}..."):
+            st.write(f"Tareas vinculadas a esta hoja de cálculo: ({len(lista_tareas)})")
+            
+            # Botones internos en cuadrícula de 4
+            cols = st.columns(4)
+            for j, t in enumerate(lista_tareas):
+                with cols[j % 4]:
+                    if st.button(f"📥 {t['tab']}", key=f"btn_{t['tab']}_{num}", use_container_width=True):
+                        with st.spinner("Procesando..."):
+                            conn = snowflake.connector.connect(**SF_PARAMS)
+                            cs = conn.cursor()
+                            success, msg = run_task(t, drive_service, gc, cs)
+                            cs.close()
+                            conn.close()
+                            if success: st.toast(f"✅ {msg}")
+                            else: st.error(msg)
+
 except Exception as e:
     st.error(f"🚨 Initialization Error: {e}")
