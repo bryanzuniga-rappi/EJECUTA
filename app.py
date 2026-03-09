@@ -322,6 +322,15 @@ TAREAS = [
         "c_end": "L",
         "p_row": 1,
         "p_col": 1
+    },
+    {
+        "sql": "STOCK_BOLSAS.sql",
+        "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0",
+        "tab": "BASE",
+        "c_start": "A1",
+        "c_end": "X",
+        "p_row": 1,
+        "p_col": 1
     }
 ]
 
