@@ -11,7 +11,7 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
-# Configuracion basica
+# Configuracion de pagina
 st.set_page_config(page_title="Data Sync", layout="wide")
 
 SF_PARAMS = {
@@ -307,43 +307,57 @@ def run_task(t, drive_service, gc, cs):
 # Interfaz
 st.title("Data Pipeline")
 
-# Credenciales
+# Carga automatica de Secretos desde Settings
+sf_token = st.secrets.get("SNOWFLAKE_TOKEN")
+google_json = st.secrets.get("GOOGLE_JSON_KEY")
+
 with st.sidebar:
-    st.subheader("Credentials")
-    sf_token = st.text_input("Snowflake Token", type="password")
-    google_json = st.text_area("Google JSON Key")
+    st.subheader("Credentials Status")
+    if sf_token and google_json:
+        st.success("Secrets loaded from Settings")
+    else:
+        st.error("Missing Secrets in Settings")
+        # Backup: manual input si fallan los secretos
+        sf_token = st.text_input("Snowflake Token", type="password")
+        google_json = st.text_area("Google JSON Key")
 
 if sf_token and google_json:
-    creds_info = json.loads(google_json)
-    scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
-    creds = Credentials.from_service_account_info(creds_info, scopes=scopes)
-    drive_service = build('drive', 'v3', credentials=creds)
-    gc = gspread.authorize(creds)
-    SF_PARAMS['password'] = sf_token
+    try:
+        creds_info = json.loads(google_json)
+        scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
+        creds = Credentials.from_service_account_info(creds_info, scopes=scopes)
+        drive_service = build('drive', 'v3', credentials=creds)
+        gc = gspread.authorize(creds)
+        SF_PARAMS['password'] = sf_token
 
-    if st.button("RUN ALL TASKS"):
-        conn = snowflake.connector.connect(**SF_PARAMS)
-        cs = conn.cursor()
-        for t in TAREAS:
-            success, msg = run_task(t, drive_service, gc, cs)
-            if success: st.write(msg)
-            else: st.error(f"{t['tab']}: {msg}")
-        cs.close()
-        conn.close()
-        st.success("FINISHED")
-
-    st.divider()
-
-    cols = st.columns(4)
-    for i, t in enumerate(TAREAS):
-        with cols[i % 4]:
-            if st.button(t['tab']):
+        if st.button("RUN ALL TASKS", use_container_width=True):
+            with st.status("Executing pipeline...") as status:
                 conn = snowflake.connector.connect(**SF_PARAMS)
                 cs = conn.cursor()
-                success, msg = run_task(t, drive_service, gc, cs)
+                for t in TAREAS:
+                    st.write(f"Syncing {t['tab']}...")
+                    success, msg = run_task(t, drive_service, gc, cs)
+                    if not success: st.error(f"{t['tab']}: {msg}")
                 cs.close()
                 conn.close()
-                if success: st.info(msg)
-                else: st.error(msg)
+                status.update(label="FINISHED", state="complete")
+
+        st.divider()
+
+        # Botones individuales en cuadricula
+        cols = st.columns(4)
+        for i, t in enumerate(TAREAS):
+            with cols[i % 4]:
+                if st.button(t['tab'], key=f"btn_{i}", use_container_width=True):
+                    with st.spinner(f"Updating {t['tab']}..."):
+                        conn = snowflake.connector.connect(**SF_PARAMS)
+                        cs = conn.cursor()
+                        success, msg = run_task(t, drive_service, gc, cs)
+                        cs.close()
+                        conn.close()
+                        if success: st.toast(msg)
+                        else: st.error(msg)
+    except Exception as e:
+        st.error(f"Initialization Error: {e}")
 else:
-    st.warning("Missing credentials in sidebar")
+    st.warning("Please configure Secrets in Streamlit Settings.")
