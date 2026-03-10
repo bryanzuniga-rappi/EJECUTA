@@ -6,6 +6,7 @@ import io
 import snowflake.connector
 import json
 import time
+from datetime import datetime, timedelta
 import base64
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
@@ -15,7 +16,7 @@ from googleapiclient.http import MediaIoBaseDownload
 st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS
+# 1. NOMBRES DE MUNDOS (LIMPIOS)
 # =========================================================
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "OPERACIONES CH",
@@ -27,10 +28,10 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY"
 }
 
-# --- CSS DEFINITIVO V15 (BOTONES ESTANDARIZADOS & TEXTO CENTRADO) ---
+# --- CSS APPLE V16 (BOTONES ESTÁNDAR & TEXTO CENTRADO) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
 
     html, body, [class*="css"], .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
@@ -51,7 +52,7 @@ st.markdown("""
     .app-header h1 { font-size: 2.8rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BOTÓN MAESTRO IZQUIERDA */
+    /* BOTÓN MAESTRO */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
@@ -61,12 +62,11 @@ st.markdown("""
         font-size: 0.9rem !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
-        letter-spacing: 2px !important;
         width: auto !important;
         min-width: 250px;
     }
 
-    /* BOTÓN LIMPIAR DERECHA */
+    /* BOTÓN LIMPIAR */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -77,41 +77,39 @@ st.markdown("""
         float: right !important;
     }
 
-    /* BOTONES TAREA: ESTANDARIZACIÓN TOTAL */
-    [data-testid="stColumn"] div.stButton > button {
+    /* ESTANDARIZACIÓN DE BOTONES EN DESPLEGABLES */
+    [data-testid="stExpander"] div.stButton > button {
         background-color: rgba(255, 255, 255, 0.03) !important;
         color: #ffffff !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 12px !important;
         
-        /* Tamaño Fijo Estandarizado */
-        height: 80px !important; 
+        /* Geometría Fija Estricta */
+        height: 75px !important;
+        min-height: 75px !important;
+        max-height: 75px !important;
         width: 100% !important;
         
-        /* Alineación de Texto */
+        /* Centrado Total */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
         
-        /* Control de Texto */
+        /* Tipografía */
         font-size: 11px !important;
         font-weight: 500 !important;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        line-height: 1.2 !important;
-        padding: 10px !important;
-        
-        /* Evitar desbordamiento */
+        line-height: 1.1 !important;
+        padding: 8px !important;
+
+        /* Prevención de desbordamiento */
         overflow: hidden !important;
         white-space: normal !important;
         word-wrap: break-word !important;
-        text-overflow: ellipsis !important;
-        
-        transition: all 0.3s ease !important;
     }
     
-    [data-testid="stColumn"] div.stButton > button:hover {
+    [data-testid="stExpander"] div.stButton > button:hover {
         border-color: #29b5e8 !important;
         background: rgba(41, 181, 232, 0.1) !important;
         transform: translateY(-2px);
@@ -141,18 +139,12 @@ st.markdown("""
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* EXPANDERS */
-    .stExpander {
-        border: none !important;
-        background: rgba(255, 255, 255, 0.015) !important;
-        border-radius: 15px !important;
-        margin-bottom: 12px !important;
-    }
+    .stExpander { border: none !important; background: rgba(255, 255, 255, 0.015) !important; border-radius: 15px !important; margin-bottom: 10px; }
     </style>
     """, unsafe_allow_html=True)
 
 # =========================================================
-# ESTRUCTURA DE DATOS ORIGINAL
+# ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS)
 # =========================================================
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
@@ -194,9 +186,14 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LÓGICA DE LOGS ---
+# --- LÓGICA DE LOGS (UTC-6) ---
 if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online."]
-def add_log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
+
+def add_log(msg):
+    # Ajuste manual a UTC-6
+    mx_time = datetime.utcnow() - timedelta(hours=6)
+    timestamp = mx_time.strftime("%H:%M:%S")
+    st.session_state.logs.append(f"› {timestamp} | {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
@@ -241,7 +238,15 @@ try:
     # BARRA DE COMANDO
     col_l, col_r = st.columns([4, 1])
     with col_l:
-        execute_masivo = st.button("EJECUTAR MASIVO", key="masivo_btn")
+        if st.button("EJECUTAR MASIVO", key="masivo_btn"):
+            add_log("MASTER SYNC INITIATED...")
+            conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+            for t in TAREAS:
+                run_task(t, drive_service, gc, cs)
+                add_log(f"Synced: {t['tab']}")
+            cs.close(); conn.close()
+            st.rerun()
+
     with col_r:
         if st.button("Limpiar Consola", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
@@ -249,14 +254,6 @@ try:
     # CONSOLA
     log_content = "<br>".join(st.session_state.logs[-12:])
     st.markdown(f'<div class="terminal-box">{log_content}<span class="cursor"></span></div>', unsafe_allow_html=True)
-
-    # EJECUCIÓN MASIVA
-    if execute_masivo:
-        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-        for t in TAREAS:
-            run_task(t, drive_service, gc, cs)
-            add_log(f"Synced: {t['tab']} OK")
-        cs.close(); conn.close(); st.rerun()
 
     # MUNDOS
     mundos = {}
@@ -268,7 +265,6 @@ try:
     for sid, lista in mundos.items():
         nombre_mundo = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(nombre_mundo):
-            # Parrilla de 4 columnas exactas
             cols = st.columns(4)
             for i, t in enumerate(lista):
                 with cols[i % 4]:
@@ -278,4 +274,4 @@ try:
                         cs.close(); conn.close(); add_log(f"Manual Sync {t['tab']} OK"); st.rerun()
 
 except Exception as e:
-    st.error(f"Kernel Panic: {e}")
+    st.error(f"Error: {e}")
