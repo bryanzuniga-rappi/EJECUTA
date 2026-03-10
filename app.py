@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS PROFESIONAL REFINADO (APPLE MINIMALISM) ---
+# --- CSS DEFINITIVO: APPLE LUXURY + LEGIBILIDAD TOTAL ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -41,116 +41,110 @@ st.markdown("""
         background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%);
     }
 
-    .app-header {
-        text-align: center;
-        padding: 40px 0 20px 0;
-    }
+    /* Títulos */
+    .app-header { text-align: center; padding: 40px 0 20px 0; }
     .app-header h1 {
-        font-size: 3rem !important;
+        font-size: 3.2rem !important;
         font-weight: 600 !important;
         letter-spacing: -1.5px !important;
-        margin-bottom: 0 !important;
         color: #FFFFFF;
+        margin-bottom: 0px !important;
+    }
+    .app-header p {
+        color: #29b5e8;
+        font-weight: 400;
+        letter-spacing: 6px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        margin-top: -10px !important;
     }
 
-    /* ----------------------------------------------------------- */
-    /* BOTÓN MAESTRO: EJECUTAR MASIVO (ESTILO REFINADO) */
-    /* ----------------------------------------------------------- */
-    .master-btn-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin: 20px 0 50px 0;
-    }
-
+    /* BOTÓN MAESTRO: EJECUTAR MASIVO */
     .stButton > button:first-child {
         background: linear-gradient(135deg, #1fa2d4 0%, #157396 100%) !important;
         color: white !important;
         border-radius: 50px !important;
-        padding: 16px 50px 16px 80px !important;
-        font-weight: 500 !important;
+        padding: 18px 60px 18px 90px !important;
+        font-weight: 600 !important;
         font-size: 1rem !important;
         text-transform: uppercase !important;
         letter-spacing: 2px !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        transition: all 0.5s ease !important;
-        /* Neón Sutil */
-        box-shadow: 0 10px 30px rgba(31, 162, 212, 0.15) !important;
+        border: none !important;
+        box-shadow: 0 10px 40px rgba(31, 162, 212, 0.1) !important;
+        transition: all 0.4s ease !important;
         position: relative;
+        margin: 20px auto !important;
+        display: block !important;
     }
-
     .stButton > button:first-child::before {
         content: '';
-        position: absolute;
-        left: 30px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 30px;
-        background-color: white;
-        opacity: 0.9;
+        position: absolute; left: 35px; top: 50%; transform: translateY(-50%);
+        width: 32px; height: 32px; background-color: white;
         -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
         mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
         -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-        -webkit-mask-size: contain; mask-size: contain;
     }
 
-    .stButton > button:first-child:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 40px rgba(31, 162, 212, 0.25) !important;
-    }
-
-    /* BOTONES DE TAREA (SUTILES) */
+    /* BOTONES DE TAREA: LEGIBILIDAD HORIZONTAL */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        color: #a0a0a0 !important;
-        border-radius: 16px !important;
-        height: 100px !important;
-        width: 100px !important;
-        font-size: 0.7rem !important;
-        font-weight: 400 !important;
-        transition: all 0.3s ease !important;
-        margin: 0 auto !important;
-    }
-    
-    [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(31, 162, 212, 0.05) !important;
-        border-color: rgba(31, 162, 212, 0.4) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
         color: #ffffff !important;
+        border-radius: 18px !important;
+        height: 100px !important;
+        width: 100% !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        display: block !important;
+        text-align: center !important;
+        padding: 10px !important;
+        white-space: normal !important; /* IMPORTANTE: Permite saltos de línea naturales */
+        word-wrap: break-word !important;
+    }
+    [data-testid="stColumn"] div.stButton > button:hover {
+        background: rgba(41, 181, 232, 0.1) !important;
+        border-color: #29b5e8 !important;
     }
 
     /* CONSOLA */
     .console-card {
-        background: rgba(0, 0, 0, 0.3) !important;
+        background: rgba(0, 0, 0, 0.4) !important;
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 20px;
         padding: 20px;
         font-family: 'JetBrains Mono', monospace;
-        color: #1fa2d4;
-        height: 180px;
+        color: #29b5e8;
+        height: 160px;
         overflow-y: auto;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
         font-size: 0.8rem;
     }
 
-    /* EXPANDERS SIN ICONOS DE CARPETA */
+    /* EXPANDERS MUNDOS */
     .stExpander {
         border: none !important;
         background: rgba(255, 255, 255, 0.02) !important;
         border-radius: 24px !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 12px !important;
     }
-    .stExpander summary {
-        font-weight: 500 !important;
-        color: #ffffff !important;
-        padding: 15px 25px !important;
+    .stExpander summary { font-weight: 600 !important; color: white !important; font-size: 1.1rem !important; }
+    
+    /* BOTÓN SYNC ALL MUNDO */
+    .mundo-sync-container button {
+        background: transparent !important;
+        color: #29b5e8 !important;
+        border: 1px solid #29b5e8 !important;
+        border-radius: 30px !important;
+        font-size: 0.75rem !important;
+        padding: 2px 20px !important;
+        height: 30px !important;
+        width: auto !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- TAREAS (ORIGINAL) ---
+# --- ESTRUCTURA DE DATOS (ORIGINAL) ---
 SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
 
 TAREAS = [
@@ -183,12 +177,12 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LOGS ---
+# --- LÓGICA DE LOGS ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["› SnowSync initialized."]
+    st.session_state.logs = ["> SnowSync Enterprise initialized."]
 
-def add_log(msg):
-    st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
+def log(msg):
+    st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
@@ -222,7 +216,7 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1></div>', unsafe_allow_html=True)
+st.markdown('<div class="app-header"><h1>SnowSync</h1><p>ENTERPRISE EDITION</p></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -231,20 +225,18 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BOTÓN MAESTRO
-    st.markdown('<div class="master-btn-container">', unsafe_allow_html=True)
-    if st.button("EJECUTAR MASIVO", key="masivo_btn"):
-        add_log("BROADCASTING GLOBAL PIPELINE...")
+    # NIVEL 1: BOTÓN MAESTRO
+    if st.button("EJECUTAR MASIVO"):
+        log("MASTER PROTOCOL INITIATED...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            add_log(f"Synced: {t['tab']}")
+            log(f"Synced: {t['tab']}")
         cs.close(); conn.close()
-        add_log("PIPELINE COMPLETE.")
+        log("PIPELINE SUCCESSFUL.")
         st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
 
-    # CONSOLA
+    # NIVEL 2: CONSOLA
     st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
 
     # AGRUPACIÓN
@@ -254,39 +246,38 @@ try:
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # MUNDOS PLEGABLES
+    # NIVEL 3: RENDERIZADO POR MUNDOS
     for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
+        nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
-            # Botón de Mundo
-            col_mundo, _ = st.columns([1, 4])
-            with col_mundo:
-                if st.button(f"Sync All", key=f"w_{sid}"):
-                    add_log(f"Group Sync: {nombre}")
-                    conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                    for t in lista:
-                        run_task(t, drive_service, gc, cs)
-                        add_log(f"Success: {t['tab']}")
-                    cs.close(); conn.close()
-                    st.rerun()
             
+            # Botón de Mundo Completo
+            st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
+            if st.button(f"Ejecutar {nombre} Completo", key=f"m_{sid}"):
+                log(f"Iniciando Mundo: {nombre}")
+                conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+                for t in lista:
+                    run_task(t, drive_service, gc, cs)
+                    log(f"OK: {t['tab']}")
+                cs.close(); conn.close()
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+
             st.markdown("<br>", unsafe_allow_html=True)
-            
-            # Botones Cuadrados
-            cols = st.columns(10)
+
+            # Grid de Botones Individuales (Cuadrados Legibles)
+            cols = st.columns(8) # 8 columnas para no romper el texto
             for i, t in enumerate(lista):
-                with cols[i % 10]:
-                    display = t['tab'].replace('_', ' ')[:10]
-                    if st.button(f"{display}", key=f"i_{t['tab']}_{sid}"):
-                        add_log(f"Overriding {t['tab']}...")
+                with cols[i % 8]:
+                    clean_name = t['tab'].replace('_', ' ')
+                    if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
+                        log(f"Iniciando: {t['tab']}")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
-                        add_log("Done.")
+                        log(f"Finalizado: {t['tab']}")
+                        st.toast("Success")
                         st.rerun()
 
 except Exception as e:
-    st.error(f"Critical System Failure: {e}")
-
-if st.sidebar.button("Flush Console"):
-    st.session_state.logs = ["> Logs flushed."]; st.rerun()
+    st.error(f"Booting failed: {e}")
