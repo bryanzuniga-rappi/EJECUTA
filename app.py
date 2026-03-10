@@ -41,18 +41,23 @@ st.markdown("""
         background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
     }
 
-    /* TÍTULO LIMPIO Y GRAN LOGO */
+    /* TÍTULO FLOTANTE CON GRAN LOGO A LA IZQUIERDA */
     .app-header { 
-        text-align: center; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 60px 0 40px 0; 
         background: transparent !important;
+        gap: 30px;
     }
     .big-snowflake {
-        font-size: 5rem;
+        font-size: 7rem;
         color: #29b5e8;
         opacity: 0.6;
-        margin-bottom: 0px;
         line-height: 1;
+    }
+    .title-text-group {
+        text-align: left;
     }
     .app-header h1 {
         font-size: 3.5rem !important;
@@ -123,20 +128,20 @@ st.markdown("""
         transform: scale(1.04);
     }
 
-    /* CONSOLA GLASSMORPHISM */
+    /* CONSOLA GLASSMORPHISM AUTÉNTICA */
     .console-card {
-        background: rgba(0, 0, 0, 0.2) !important;
-        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.03);
         border-radius: 15px;
-        padding: 15px;
+        padding: 20px;
         font-family: 'JetBrains Mono', monospace;
         color: #29b5e8;
-        height: 140px;
+        height: 180px;
         overflow-y: auto;
         margin: 40px auto;
         max-width: 900px;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
     }
 
     /* EXPANDERS MUNDOS */
@@ -204,7 +209,7 @@ TAREAS = [
 
 # --- SESSION LOGS ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["> SnowSync Kernel initialized."]
+    st.session_state.logs = ["> SnowSync Enterprise ready."]
 
 def add_log(msg):
     st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
@@ -241,7 +246,8 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><h1>SnowSync</h1><p>Enterprise Edition</p></div>', unsafe_allow_html=True)
+# Encabezado rediseñado: Logo a la izquierda, títulos a la derecha
+st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><div class="title-text-group"><h1>SnowSync</h1><p>Enterprise Edition</p></div></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -258,6 +264,7 @@ try:
             run_task(t, drive_service, gc, cs)
             add_log(f"Synced: {t['tab']}")
         cs.close(); conn.close()
+        add_log("PIPELINE COMPLETE.")
         st.rerun()
 
     # CONSOLA HACKER
