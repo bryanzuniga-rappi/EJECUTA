@@ -27,67 +27,97 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "7. Bolsas"
 }
 
-# --- DISEÑO PROFESIONAL (CSS) ---
+# --- DISEÑO ULTRA TOP (GLASSMORPHISM & APPLE STYLE) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
 
-    html, body, [class*="css"], .stButton > button {
-        font-family: 'Poppins', sans-serif !important;
+    /* Variables de Estilo */
+    :root {
+        --sf-blue: #29b5e8;
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
     }
 
-    .main { background-color: #0e1117; }
+    /* Reset General */
+    html, body, [class*="css"] {
+        font-family: 'Poppins', sans-serif !important;
+        background-color: #050505 !important;
+        color: #ffffff;
+    }
 
-    /* BOTÓN MAESTRO AZUL */
+    /* Contenedor de la Terminal (Estilo Terminal Integrada) */
+    .terminal-container {
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 15px;
+        margin-top: 20px;
+        font-family: 'JetBrains Mono', monospace;
+        color: #a0a0a0;
+        font-size: 0.85rem;
+        height: 200px;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    }
+    .log-entry { margin-bottom: 4px; border-left: 2px solid var(--sf-blue); padding-left: 10px; }
+    .log-success { color: #4ade80; }
+    .log-error { color: #f87171; }
+
+    /* Botón Maestro (Grande y Minimalista) */
     div.stButton > button:first-child {
-        background-color: #29b5e8 !important;
+        background: linear-gradient(135deg, #29b5e8 0%, #1a89b3 100%) !important;
         color: white !important;
         border: none !important;
-        font-weight: 600 !important;
-        padding: 1rem !important;
-        border-radius: 12px !important;
-        text-transform: uppercase !important;
-        letter-spacing: 2px !important;
-        width: 100% !important;
+        padding: 20px !important;
+        border-radius: 14px !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
+        letter-spacing: 0.5px !important;
+        box-shadow: 0 10px 20px rgba(41, 181, 232, 0.2) !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    }
+    div.stButton > button:first-child:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 15px 30px rgba(41, 181, 232, 0.4) !important;
     }
 
-    /* BOTONES CUADRADOS */
-    div.stButton > button {
-        background-color: #1e2229 !important;
-        color: #FFFFFF !important;
-        border: 2px solid #29b5e8 !important;
-        border-radius: 10px !important;
+    /* Botones de Tarea (Cuadrados de Cristal) */
+    [data-testid="stVerticalBlock"] div.stButton > button {
+        background: var(--glass-bg) !important;
+        border: 1px solid var(--glass-border) !important;
+        color: #e0e0e0 !important;
+        border-radius: 12px !important;
         aspect-ratio: 1 / 1 !important;
         width: 100% !important;
-        font-size: 13px !important;
-        font-weight: 600 !important;
+        font-size: 0.75rem !important;
+        font-weight: 400 !important;
         transition: all 0.3s ease !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    
-    div.stButton > button:hover {
-        background-color: #29b5e8 !important;
-        transform: scale(1.02) !important;
-    }
-
-    /* CONSOLA TERMINAL */
-    .terminal-box {
-        background-color: #000000;
-        color: #29b5e8;
-        font-family: 'JetBrains Mono', monospace !important;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #29b5e8;
-        height: 250px;
-        overflow-y: auto;
-        font-size: 12px;
-        box-shadow: inset 0 0 10px rgba(41, 181, 232, 0.2);
+    [data-testid="stVerticalBlock"] div.stButton > button:hover {
+        background: rgba(41, 181, 232, 0.1) !important;
+        border-color: var(--sf-blue) !important;
+        color: var(--sf-blue) !important;
+        transform: scale(1.02);
     }
 
-    /* EXPANDERS */
+    /* Expanders Estilo Card */
     .stExpander {
-        border: 1px solid #29b5e8 !important;
-        background-color: #161b22 !important;
+        background: transparent !important;
+        border: 1px solid var(--glass-border) !important;
+        border-radius: 16px !important;
+        margin-bottom: 20px !important;
+        overflow: hidden;
     }
+    .stExpander summary { background-color: var(--glass-bg) !important; padding: 10px 20px !important; }
+    
+    /* Titulos */
+    h1 { font-weight: 600 !important; font-size: 2.2rem !important; margin-bottom: 0px !important; }
+    p { opacity: 0.7; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -348,12 +378,13 @@ TAREAS = [
     }
 ]
 
-# --- LÓGICA DE LOGS ---
-if 'terminal_logs' not in st.session_state:
-    st.session_state.terminal_logs = ["> Initializing SnowFlake Data Engine...", "> Ready to deploy."]
+# --- LÓGICA DE TERMINAL ---
+if 'logs' not in st.session_state:
+    st.session_state.logs = ["Ready to sync."]
 
-def log(msg):
-    st.session_state.terminal_logs.append(f"[{time.strftime('%H:%M:%S')}] {msg}")
+def log(msg, type="info"):
+    cl = "log-success" if type == "success" else "log-error" if type == "error" else ""
+    st.session_state.logs.append(f'<div class="log-entry {cl}">[{time.strftime("%H:%M:%S")}] {msg}</div>')
 
 # --- FUNCIONES CORE ---
 def get_sql_content(drive_service, file_name):
@@ -375,7 +406,7 @@ def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False, "SQL_MISSING"
+        if not query: return False, "SQL_ERROR"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
         try: wks = sh.worksheet(t["tab"])
@@ -383,13 +414,15 @@ def run_task(t, drive_service, gc, cs):
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True, "SUCCESS"
+        return True, "SYNC_OK"
     except Exception as e: return False, str(e)
 
-# --- APP ---
-st.title("❄️ DATA SYNC PRO")
+# --- APP UI ---
+st.markdown("<h1>Snowflake Data Sync</h1>", unsafe_allow_html=True)
+st.write("Sincronización automatizada de datos a nivel empresarial.")
 
 try:
+    # Carga automática de llaves
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
     google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
     creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
@@ -397,22 +430,21 @@ try:
     SF_PARAMS['password'] = sf_token
 
     # BOTÓN MAESTRO
-    if st.button("🔥 EXECUTE FULL PIPELINE"):
-        log("INICIANDO PROTOCOLO TOTAL...")
-        conn = snowflake.connector.connect(**SF_PARAMS)
-        cs = conn.cursor()
+    if st.button("EXECUTE ALL PIPELINES"):
+        log("Initiating Master Control Pipeline...")
+        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
-            log(f"Sincronizando: {t['tab']}...")
-            ok, err = run_task(t, drive_service, gc, cs)
-            if ok: log(f"OK: {t['tab']}")
-            else: log(f"ERROR en {t['tab']}: {err}")
+            log(f"Processing: {t['tab']}...")
+            ok, msg = run_task(t, drive_service, gc, cs)
+            if ok: log(f"Verified: {t['tab']}", "success")
+            else: log(f"Fail: {t['tab']} - {msg}", "error")
         cs.close(); conn.close()
-        log("PIPELINE COMPLETADO.")
+        log("Master Pipeline Execution Finished.", "success")
 
-    # TERMINAL
-    st.markdown(f'<div class="terminal-box">{"<br>".join(st.session_state.terminal_logs[-12:])}</div>', unsafe_allow_html=True)
-    
-    st.divider()
+    # TERMINAL INTEGRADA
+    st.markdown(f'<div class="terminal-container">{"".join(st.session_state.logs[-10:])}</div>', unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # AGRUPACIÓN POR MUNDOS
     mundos = {}
@@ -421,23 +453,20 @@ try:
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO
+    # RENDERIZADO POR EXPANDERS
     for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, f"Mundo ID: {sid[:8]}...")
-        with st.expander(f"📁 {nombre}"):
-            grid = st.columns(6)
+        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset: {sid[:8]}...")
+        with st.expander(f"📦 {nombre}"):
+            grid = st.columns(8) # Más compacto: 8 botones por fila
             for i, t in enumerate(lista):
-                with grid[i % 6]:
-                    if st.button(t['tab'], key=f"btn_{t['tab']}_{sid}"):
-                        log(f"Manual Override: {t['tab']}...")
+                with grid[i % 8]:
+                    if st.button(t['tab'], key=f"t_{t['tab']}"):
+                        log(f"Manual Sync: {t['tab']}...")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                        ok, err = run_task(t, drive_service, gc, cs)
+                        ok, msg = run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
-                        if ok: log(f"OK: {t['tab']}"); st.toast("Success")
-                        else: log(f"FAIL: {err}"); st.error("Error")
+                        if ok: log(f"Success: {t['tab']}", "success"); st.toast("OK")
+                        else: log(f"Error: {msg}", "error"); st.error("Fail")
 
 except Exception as e:
-    st.error(f"Boot Error: {e}")
-
-if st.sidebar.button("Clear Console"):
-    st.session_state.terminal_logs = ["> Console cleared."]; st.rerun()
+    st.error(f"System boot failed: {e}")
