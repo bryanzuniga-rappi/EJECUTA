@@ -235,4 +235,75 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1><p style="color:#29b5e8; font-weight:300; letter-spacing:4px; text-align:center;">ENTERPRISE EDITION</p></div>',
+st.markdown('<div class="app-header"><h1>SnowSync</h1><p style="color:#29b5e8; font-weight:300; letter-spacing:4px; text-align:center;">ENTERPRISE EDITION</p></div>', unsafe_allow_html=True)
+
+try:
+    sf_token = st.secrets["SNOWFLAKE_TOKEN"]
+    google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
+    creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
+    drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
+    SF_PARAMS['password'] = sf_token
+
+    # -----------------------------------------------------------
+    # BOTÓN MAESTRO: EJECUTAR MASIVO (VECTOR & GLOW)
+    # -----------------------------------------------------------
+    st.markdown('<div class="master-btn-container">', unsafe_allow_html=True)
+    
+    # El texto ahora es "EJECUTAR MASIVO" y el emoji ⚙️ va al final
+    if st.button("EJECUTAR MASIVO ⚙️", key="masivo_btn"):
+        add_log("MASTER COMMAND DETECTED: INITIALIZING FULL PIPELINE...")
+        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+        for t in TAREAS:
+            run_task(t, drive_service, gc, cs)
+            add_log(f"Synced: {t['tab']}")
+        cs.close(); conn.close()
+        add_log("PIPELINE COMPLETE.")
+        st.rerun()
+        
+    st.markdown('</div>', unsafe_allow_html=True)
+    # -----------------------------------------------------------
+
+    # CONSOLA
+    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
+
+    # AGRUPACIÓN
+    mundos = {}
+    for tarea in TAREAS:
+        sid = tarea["sheet"]
+        if sid not in mundos: mundos[sid] = []
+        mundos[sid].append(tarea)
+
+    # MUNDOS PLEGABLES
+    for sid, lista in mundos.items():
+        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
+        with st.expander(f"📁 {nombre}"):
+            # BOTÓN DE MUNDO
+            if st.button(f"Sync All {nombre}", key=f"w_{sid}"):
+                add_log(f"Group Sync: {nombre}")
+                conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+                for t in lista:
+                    run_task(t, drive_service, gc, cs)
+                    add_log(f"Success: {t['tab']}")
+                cs.close(); conn.close()
+                st.rerun()
+            
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            # BOTONES CUADRADOS
+            cols = st.columns(10) # 10 por fila para que se vean compactos y Apple Style
+            for i, t in enumerate(lista):
+                with cols[i % 10]:
+                    display = t['tab'].replace('_', ' ')[:10]
+                    if st.button(f"⚡\n{display}", key=f"i_{t['tab']}_{sid}"):
+                        add_log(f"Overriding {t['tab']}...")
+                        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+                        run_task(t, drive_service, gc, cs)
+                        cs.close(); conn.close()
+                        add_log("Done.")
+                        st.rerun()
+
+except Exception as e:
+    st.error(f"Critical System Failure: {e}")
+
+if st.sidebar.button("Clear Log"):
+    st.session_state.logs = ["> Logs flushed."]; st.rerun()
