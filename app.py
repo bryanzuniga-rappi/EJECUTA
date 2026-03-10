@@ -15,7 +15,7 @@ from googleapiclient.http import MediaIoBaseDownload
 st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS (LIMPIOS SIN EMOJIS)
+# CONFIGURACIÓN DE NOMBRES DE MUNDOS
 # =========================================================
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "OPERACIONES CH",
@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY"
 }
 
-# --- CSS APPLE V14 (RELIABLE & ENTERPRISE) ---
+# --- CSS DEFINITIVO V15 (BOTONES ESTANDARIZADOS & TEXTO CENTRADO) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -51,7 +51,7 @@ st.markdown("""
     .app-header h1 { font-size: 2.8rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BARRA DE COMANDO */
+    /* BOTÓN MAESTRO IZQUIERDA */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
@@ -66,6 +66,7 @@ st.markdown("""
         min-width: 250px;
     }
 
+    /* BOTÓN LIMPIAR DERECHA */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -76,27 +77,43 @@ st.markdown("""
         float: right !important;
     }
 
-    /* BOTONES TAREA RECTANGULARES CONSISTENTES */
+    /* BOTONES TAREA: ESTANDARIZACIÓN TOTAL */
     [data-testid="stColumn"] div.stButton > button {
         background-color: rgba(255, 255, 255, 0.03) !important;
         color: #ffffff !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 12px !important;
-        height: 80px !important; /* Altura fija para consistencia */
+        
+        /* Tamaño Fijo Estandarizado */
+        height: 80px !important; 
         width: 100% !important;
-        font-size: 13px !important;
-        font-weight: 500 !important;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        
+        /* Alineación de Texto */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        text-align: center !important;
+        
+        /* Control de Texto */
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1.2 !important;
+        padding: 10px !important;
+        
+        /* Evitar desbordamiento */
+        overflow: hidden !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        text-overflow: ellipsis !important;
+        
         transition: all 0.3s ease !important;
     }
     
     [data-testid="stColumn"] div.stButton > button:hover {
         border-color: #29b5e8 !important;
-        background: rgba(41, 181, 232, 0.08) !important;
+        background: rgba(41, 181, 232, 0.1) !important;
         transform: translateY(-2px);
     }
 
@@ -124,18 +141,19 @@ st.markdown("""
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* EXPANDERS SIN ICONOS */
+    /* EXPANDERS */
     .stExpander {
         border: none !important;
         background: rgba(255, 255, 255, 0.015) !important;
         border-radius: 15px !important;
         margin-bottom: 12px !important;
     }
-    .stExpander summary { font-weight: 600 !important; letter-spacing: 1px; color: #eee !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS ORIGINAL (INTACTA) ---
+# =========================================================
+# ESTRUCTURA DE DATOS ORIGINAL
+# =========================================================
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
     'account': 'hg51401',
@@ -177,7 +195,7 @@ TAREAS = [
 ]
 
 # --- LÓGICA DE LOGS ---
-if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Ready."]
+if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online."]
 def add_log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
 # --- CORE FUNCTIONS ---
@@ -199,7 +217,7 @@ def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False
+        if not query: return False, "SQL NOT FOUND"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
         try: wks = sh.worksheet(t["tab"])
@@ -207,8 +225,8 @@ def run_task(t, drive_service, gc, cs):
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True
-    except: return False
+        return True, f"SUCCESS: {t['tab']}"
+    except Exception as e: return False, str(e)
 
 # --- UI START ---
 st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><div class="title-text-group"><h1>SnowSync</h1><p>Enterprise Edition</p></div></div>', unsafe_allow_html=True)
@@ -220,7 +238,7 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE ACCIÓN
+    # BARRA DE COMANDO
     col_l, col_r = st.columns([4, 1])
     with col_l:
         execute_masivo = st.button("EJECUTAR MASIVO", key="masivo_btn")
@@ -228,7 +246,7 @@ try:
         if st.button("Limpiar Consola", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
 
-    # CONSOLA CON CURSOR
+    # CONSOLA
     log_content = "<br>".join(st.session_state.logs[-12:])
     st.markdown(f'<div class="terminal-box">{log_content}<span class="cursor"></span></div>', unsafe_allow_html=True)
 
@@ -250,7 +268,7 @@ try:
     for sid, lista in mundos.items():
         nombre_mundo = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(nombre_mundo):
-            # Grid de 4 columnas exactas por fila
+            # Parrilla de 4 columnas exactas
             cols = st.columns(4)
             for i, t in enumerate(lista):
                 with cols[i % 4]:
