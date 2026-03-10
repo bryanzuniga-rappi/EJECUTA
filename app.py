@@ -15,7 +15,7 @@ from googleapiclient.http import MediaIoBaseDownload
 st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS (EDITA AQUÍ)
+# CONFIGURACIÓN DE NOMBRES DE MUNDOS
 # =========================================================
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Operaciones CH",
@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE ULTIMATE (16:9 + CLEAN INTERFACE) ---
+# --- CSS PROFESIONAL REFINADO (SIN VECTORES, SÓLO LUZ Y FORMA) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -42,71 +42,74 @@ st.markdown("""
     }
 
     /* Títulos */
-    .app-header { text-align: center; padding: 30px 0; }
-    .app-header h1 { font-size: 3rem !important; font-weight: 600 !important; color: white; margin-bottom: 0px !important; }
-    .app-header p { color: #29b5e8; letter-spacing: 5px; font-size: 0.8rem; text-transform: uppercase; }
+    .app-header { text-align: center; padding: 40px 0 20px 0; }
+    .app-header h1 {
+        font-size: 3rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -1.5px !important;
+        color: #FFFFFF;
+        margin-bottom: 0px !important;
+    }
+    .app-header p {
+        color: #29b5e8;
+        letter-spacing: 5px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+    }
 
-    /* BOTÓN MASIVO (SNOWFLAKE AZUL) */
+    /* BOTÓN MAESTRO: EJECUTAR MASIVO (AZUL SÓLIDO Y LIMPIO) */
     div.stButton > button:first-child {
-        background: linear-gradient(135deg, #1fa2d4 0%, #157396 100%) !important;
+        background: #29b5e8 !important;
         color: white !important;
         border-radius: 50px !important;
-        padding: 16px 60px 16px 80px !important;
+        padding: 18px 60px !important;
         font-weight: 600 !important;
-        font-size: 1rem !important;
+        font-size: 1.1rem !important;
         text-transform: uppercase !important;
         letter-spacing: 2px !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        box-shadow: 0 10px 30px rgba(31, 162, 212, 0.1) !important;
-        transition: all 0.3s ease !important;
-        position: relative;
+        border: none !important;
+        transition: all 0.4s ease !important;
         margin: 20px auto !important;
         display: block !important;
-    }
-    
-    /* Icono Snowflake Estático */
-    div.stButton > button:first-child::before {
-        content: '';
-        position: absolute; left: 35px; top: 50%; transform: translateY(-50%);
-        width: 32px; height: 32px; background-color: white;
-        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
-        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
-        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        box-shadow: 0 10px 30px rgba(41, 181, 232, 0.2) !important;
     }
     
     div.stButton > button:first-child:hover {
-        transform: scale(1.02);
-        box-shadow: 0 15px 45px rgba(31, 162, 212, 0.2) !important;
+        transform: scale(1.03);
+        box-shadow: 0 15px 40px rgba(41, 181, 232, 0.4) !important;
+        background: #3ac0f2 !important;
     }
 
-    /* BOTONES DE TAREA: RECTANGULARES 16:9 + EFECTO APPLE */
+    /* BOTONES DE TAREA: RECTANGULARES 16:9 LIMPIOS */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #e0e0e0 !important;
         border-radius: 12px !important;
-        /* Proporción 16:9 estandarizada */
-        height: 80px !important; 
-        width: 142px !important;
-        min-width: 142px !important;
-        max-width: 142px !important;
+        /* Proporción 16:9 */
+        height: 85px !important; 
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
         font-size: 0.75rem !important;
-        font-weight: 500 !important;
+        font-weight: 400 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        padding: 8px !important;
+        padding: 10px !important;
         white-space: normal !important;
         word-wrap: break-word !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         margin: 0 auto !important;
     }
+    
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border-color: rgba(41, 181, 232, 0.5) !important;
+        background: rgba(41, 181, 232, 0.08) !important;
+        border-color: rgba(41, 181, 232, 0.6) !important;
+        color: #ffffff !important;
         transform: scale(1.05);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
     }
 
     /* CONSOLA GLASSMORPHISM */
@@ -139,9 +142,9 @@ st.markdown("""
         color: #29b5e8 !important;
         border: 1px solid rgba(41, 181, 232, 0.3) !important;
         border-radius: 30px !important;
-        font-size: 0.7rem !important;
+        font-size: 0.75rem !important;
         padding: 2px 20px !important;
-        height: 32px !important;
+        height: 35px !important;
         width: auto !important;
         min-width: 0 !important;
     }
@@ -239,7 +242,7 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BOTÓN MAESTRO
+    # NIVEL 1: BOTÓN MAESTRO (LIMPIO, SIN VECTOR)
     if st.button("EJECUTAR MASIVO"):
         log("INITIALIZING MASSIVE EXECUTION...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
@@ -250,24 +253,24 @@ try:
         log("PIPELINE COMPLETE.")
         st.rerun()
 
-    # CONSOLA
+    # NIVEL 2: CONSOLA
     st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
 
-    # AGRUPACIÓN (LÓGICA INTERNA)
+    # AGRUPACIÓN
     mundos = {}
     for tarea in TAREAS:
         sid = tarea["sheet"]
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO POR MUNDOS
+    # NIVEL 3: RENDERIZADO POR MUNDOS
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
             
             # Botón de Mundo Completo
             st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
-            if st.button(f"Ejecutar {nombre} Completo", key=f"m_{sid}"):
+            if st.button(f"Sync All {nombre} Group", key=f"m_{sid}"):
                 log(f"Iniciando Mundo: {nombre}")
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                 for t in lista:
@@ -279,8 +282,8 @@ try:
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            # Grid de Botones Individuales (RECTANGULARES 16:9)
-            cols = st.columns(8) # Organizados en 8 columnas
+            # Grid de Botones Individuales (RECTANGULARES 16:9 ESTÁNDAR)
+            cols = st.columns(8) 
             for i, t in enumerate(lista):
                 with cols[i % 8]:
                     clean_name = t['tab'].replace('_', ' ')
@@ -290,7 +293,7 @@ try:
                         run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
                         log(f"Finalizado: {t['tab']}")
-                        st.toast("Success")
+                        st.toast(f"Updated {t['tab']}")
                         st.rerun()
 
 except Exception as e:
