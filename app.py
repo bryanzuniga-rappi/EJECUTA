@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE ULTIMATE (MINIMALISMO & CONSOLA) ---
+# --- CSS APPLE ULTIMATE + CONSOLA CONVENCIONAL ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -41,40 +41,21 @@ st.markdown("""
         background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
     }
 
-    /* TÍTULO FLOTANTE CON GRAN LOGO A LA IZQUIERDA */
+    /* HEADER CON 10% OPACIDAD */
     .app-header { 
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 60px 0 40px 0; 
-        background: transparent !important;
+        padding: 40px 0; 
+        background: rgba(0, 0, 0, 0.1) !important; /* 10% Opacidad */
+        border-radius: 30px;
+        margin-bottom: 30px;
         gap: 30px;
     }
-    .big-snowflake {
-        font-size: 7rem;
-        color: #29b5e8;
-        opacity: 0.6;
-        line-height: 1;
-    }
-    .title-text-group {
-        text-align: left;
-    }
-    .app-header h1 {
-        font-size: 3.5rem !important;
-        font-weight: 600 !important;
-        letter-spacing: -2px !important;
-        color: #FFFFFF !important;
-        margin: 0 !important;
-        background: none !important;
-    }
-    .app-header p {
-        color: #29b5e8;
-        letter-spacing: 8px;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        margin-top: 5px !important;
-        opacity: 0.8;
-    }
+    .big-snowflake { font-size: 6rem; color: #29b5e8; opacity: 0.7; }
+    .title-text-group { text-align: left; }
+    .app-header h1 { font-size: 3.2rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
+    .app-header p { color: #29b5e8; letter-spacing: 8px; font-size: 0.8rem; text-transform: uppercase; margin: 0 !important; }
 
     /* BOTÓN GHOST EJECUTAR MASIVO */
     div.stButton > button:first-child {
@@ -83,23 +64,20 @@ st.markdown("""
         border: 1px solid rgba(41, 181, 232, 0.5) !important;
         border-radius: 100px !important;
         padding: 12px 60px !important;
-        font-weight: 400 !important;
         font-size: 0.9rem !important;
         text-transform: uppercase !important;
         letter-spacing: 3px !important;
-        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        transition: all 0.4s ease !important;
         margin: 0 auto !important;
         display: block !important;
     }
     div.stButton > button:first-child:hover {
         background: rgba(41, 181, 232, 0.1) !important;
         border-color: #29b5e8 !important;
-        color: white !important;
         transform: scale(1.02);
-        box-shadow: 0 0 25px rgba(41, 181, 232, 0.15) !important;
     }
 
-    /* BOTONES DE TAREA RECTANGULARES 16:9 */
+    /* BOTONES DE TAREA 16:9 */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -107,62 +85,42 @@ st.markdown("""
         border-radius: 12px !important;
         height: 85px !important; 
         width: 155px !important;
-        min-width: 155px !important;
-        max-width: 155px !important;
         font-size: 0.75rem !important;
-        font-weight: 400 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-        padding: 10px !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
         transition: all 0.3s ease !important;
-        margin: 0 auto !important;
     }
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(41, 181, 232, 0.05) !important;
         border-color: rgba(41, 181, 232, 0.4) !important;
         color: #ffffff !important;
         transform: scale(1.04);
     }
 
-    /* CONSOLA GLASSMORPHISM AUTÉNTICA */
-    .console-card {
-        background: rgba(0, 0, 0, 0.4) !important;
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        border-radius: 15px;
+    /* CONSOLA CONVENCIONAL */
+    .terminal-window {
+        background-color: #0a0a0a;
+        color: #00ff00;
+        font-family: 'Courier New', Courier, monospace !important;
         padding: 20px;
-        font-family: 'JetBrains Mono', monospace;
-        color: #29b5e8;
-        height: 180px;
+        border: 1px solid #333;
+        border-radius: 10px;
+        height: 250px;
         overflow-y: auto;
-        margin: 40px auto;
-        max-width: 900px;
-        font-size: 0.8rem;
+        margin: 20px auto;
+        max-width: 95%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
+    .log-line { line-height: 1.4; font-size: 14px; margin: 2px 0; }
+    .highlight { color: #00ffff; }
+    .cursor {
+        display: inline-block;
+        width: 10px;
+        height: 15px;
+        background-color: #00ff00;
+        animation: blink 1s infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
 
-    /* EXPANDERS MUNDOS */
-    .stExpander {
-        border: none !important;
-        background: rgba(255, 255, 255, 0.01) !important;
-        border-radius: 20px !important;
-        margin-bottom: 8px !important;
-    }
-    .stExpander summary { font-weight: 400 !important; color: #888 !important; font-size: 1rem !important; }
-    .stExpander summary:hover { color: white !important; }
-    
-    /* BOTÓN SYNC ALL MUNDO */
-    .mundo-sync-container button {
-        background: transparent !important;
-        color: #29b5e8 !important;
-        border: 1px solid rgba(41, 181, 232, 0.2) !important;
-        border-radius: 30px !important;
-        font-size: 0.7rem !important;
-        height: 32px !important;
-    }
+    /* EXPANDERS */
+    .stExpander { border: none !important; background: rgba(255, 255, 255, 0.01) !important; border-radius: 20px !important; margin-bottom: 8px !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -207,12 +165,9 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- SESSION LOGS ---
-if 'logs' not in st.session_state:
-    st.session_state.logs = ["> SnowSync Enterprise ready."]
-
-def add_log(msg):
-    st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
+# --- LÓGICA DE LOGS ---
+if 'logs' not in st.session_state: st.session_state.logs = ["Ready for command..."]
+def add_log(msg): st.session_state.logs.append(f"[{time.strftime('%H:%M:%S')}] {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
@@ -246,7 +201,7 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-# Encabezado rediseñado: Logo a la izquierda, títulos a la derecha
+# Header alineado con logo a la izquierda y 10% opacidad configurado en CSS
 st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><div class="title-text-group"><h1>SnowSync</h1><p>Enterprise Edition</p></div></div>', unsafe_allow_html=True)
 
 try:
@@ -256,53 +211,48 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BOTÓN MAESTRO GHOST STYLE
+    # BOTÓN MAESTRO GHOST
     if st.button("EJECUTAR MASIVO"):
-        add_log("MASTER PROTOCOL INITIATED...")
+        add_log("MASTER COMMAND: INITIATING GLOBAL PIPELINE...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            add_log(f"Synced: {t['tab']}")
+            add_log(f"Status: <span class='highlight'>{t['tab']}</span> updated.")
         cs.close(); conn.close()
-        add_log("PIPELINE COMPLETE.")
+        add_log("PIPELINE EXECUTION FINISHED.")
         st.rerun()
 
-    # CONSOLA HACKER
-    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-6:])}</div>', unsafe_allow_html=True)
+    # CONSOLA CONVENCIONAL ESTILO HACKER
+    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-10:]])
+    st.markdown(f'<div class="terminal-window">{log_content}<span class="cursor"></span></div>', unsafe_allow_html=True)
 
-    # AGRUPACIÓN
+    # MUNDOS
     mundos = {}
     for tarea in TAREAS:
         sid = tarea["sheet"]
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
-            st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
-            if st.button(f"Ejecutar {nombre} Completo", key=f"m_{sid}"):
-                add_log(f"Group Sync: {nombre}")
+            if st.button(f"Sync Group: {nombre}", key=f"m_{sid}"):
+                add_log(f"Batch Sync started: {nombre}")
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                 for t in lista:
                     run_task(t, drive_service, gc, cs)
                 cs.close(); conn.close()
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
             
             st.markdown("<br>", unsafe_allow_html=True)
-            
             cols = st.columns(8) 
             for i, t in enumerate(lista):
                 with cols[i % 8]:
-                    clean_name = t['tab'].replace('_', ' ')
-                    if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
-                        add_log(f"Override: {t['tab']}")
+                    if st.button(t['tab'].replace('_', ' '), key=f"btn_{t['tab']}_{sid}"):
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
                         st.rerun()
 
 except Exception as e:
-    st.error(f"Initialization Error: {e}")
+    st.error(f"Error: {e}")
