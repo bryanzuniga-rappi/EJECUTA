@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS ULTRA PRO (APPLE DESIGN LANGUAGE) ---
+# --- CSS ULTRA PRO V5 (APPLE DESIGN + SNOWFLAKE VECTOR) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -54,23 +54,67 @@ st.markdown("""
         color: white;
     }
 
-    /* BOTÓN MASTER (CENTRAL) */
-    /* Usamos el contenedor principal para darle estilo al primer botón que encuentre */
-    .main div.stButton > button {
-        background-color: white !important;
-        color: black !important;
-        border-radius: 100px !important;
-        padding: 12px 40px !important;
-        font-weight: 500 !important;
+    /* ----------------------------------------------------------- */
+    /* EL NUEVO BOTÓN MAESTRO: EJECUTAR MASIVO (VECTOR & GLOW) */
+    /* ----------------------------------------------------------- */
+    
+    /* Contenedor del botón para centrarlo y darle el efecto glow */
+    .master-btn-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 20px 0 50px 0;
+        position: relative;
+    }
+
+    /* Estilo base del botón Streamlit */
+    .stButton > button:first-child {
+        background-color: #29b5e8 !important; /* Azul Copo de Nieve */
+        color: white !important;
+        border-radius: 50px !important;
+        padding: 16px 50px 16px 80px !important; /* Espacio para el vector */
+        font-weight: 600 !important;
+        font-size: 1.1rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1.5px !important;
         border: none !important;
-        margin: 0 auto 40px auto !important;
-        display: block !important;
-        transition: all 0.4s ease !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        box-shadow: 0 10px 30px rgba(41, 181, 232, 0.4) !important;
+        position: relative;
     }
-    .main div.stButton > button:hover {
-        transform: scale(1.03);
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+
+    /* El Vector del Copo de Nieve (Incrustado en CSS) */
+    .stButton > button:first-child::before {
+        content: '';
+        position: absolute;
+        left: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 35px;
+        height: 35px;
+        background-color: white;
+        /* Imagen Vectorial SVG del copo de nieve Snowflake */
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        transition: all 0.4s ease;
     }
+
+    /* Hover del Botón Maestro */
+    .stButton > button:first-child:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(41, 181, 232, 0.7) !important;
+    }
+
+    /* Hover del Copo de Nieve (Gira levemente) */
+    .stButton > button:first-child:hover::before {
+        transform: translateY(-50%) rotate(30deg);
+    }
+
+    /* ----------------------------------------------------------- */
 
     /* BOTONES DE TAREA (DENTRO DE COLUMNAS) */
     [data-testid="stColumn"] div.stButton > button {
@@ -190,65 +234,5 @@ def run_task(t, drive_service, gc, cs):
         return True
     except: return False
 
-# --- UI ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1><p style="color:#29b5e8; font-weight:300; letter-spacing:4px; text-align:center;">ENTERPRISE EDITION</p></div>', unsafe_allow_html=True)
-
-try:
-    sf_token = st.secrets["SNOWFLAKE_TOKEN"]
-    google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
-    creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
-    drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
-    SF_PARAMS['password'] = sf_token
-
-    # BOTÓN MAESTRO
-    if st.button("INITIALIZE MASTER PIPELINE"):
-        add_log("MASTER COMMAND DETECTED...")
-        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-        for t in TAREAS:
-            run_task(t, drive_service, gc, cs)
-            add_log(f"Synced: {t['tab']}")
-        cs.close(); conn.close()
-        add_log("PIPELINE COMPLETE.")
-        st.rerun()
-
-    # CONSOLA
-    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
-
-    # AGRUPACIÓN
-    mundos = {}
-    for tarea in TAREAS:
-        sid = tarea["sheet"]
-        if sid not in mundos: mundos[sid] = []
-        mundos[sid].append(tarea)
-
-    # MUNDOS PLEGABLES
-    for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
-        with st.expander(f"📁 {nombre}"):
-            # BOTÓN DE MUNDO
-            if st.button(f"Sync All {nombre}", key=f"w_{sid}"):
-                add_log(f"Group Sync: {nombre}")
-                conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                for t in lista:
-                    run_task(t, drive_service, gc, cs)
-                    add_log(f"Success: {t['tab']}")
-                cs.close(); conn.close()
-                st.rerun()
-            
-            st.markdown("<br>", unsafe_allow_html=True)
-            
-            # BOTONES CUADRADOS
-            cols = st.columns(10) # 10 por fila para que se vean compactos y Apple Style
-            for i, t in enumerate(lista):
-                with cols[i % 10]:
-                    display = t['tab'].replace('_', ' ')[:10]
-                    if st.button(f"⚡\n{display}", key=f"i_{t['tab']}_{sid}"):
-                        add_log(f"Overriding {t['tab']}...")
-                        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                        run_task(t, drive_service, gc, cs)
-                        cs.close(); conn.close()
-                        add_log("Done.")
-                        st.rerun()
-
-except Exception as e:
-    st.error(f"Critical System Failure: {e}")
+# --- UI START ---
+st.markdown('<div class="app-header"><h1>SnowSync</h1><p style="color:#29b5e8; font-weight:300; letter-spacing:4px; text-align:center;">ENTERPRISE EDITION</p></div>',
