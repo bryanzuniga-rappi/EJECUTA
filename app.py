@@ -14,70 +14,84 @@ from googleapiclient.http import MediaIoBaseDownload
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide")
 
-# --- DISEÑO PROFESIONAL AZUL SNOWFLAKE (CSS) ---
+# =========================================================
+# CONFIGURACIÓN DE NOMBRES DE MUNDOS
+# =========================================================
+NOMBRES_MUNDOS = {
+    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "1. Operaciones CH",
+    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "2. Golden Dani",
+    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "3. SKUs",
+    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "4. AVL",
+    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "5. Históricos",
+    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "6. Inventarios",
+    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "7. Bolsas"
+}
+
+# --- DISEÑO PROFESIONAL (CSS) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
 
-    /* Aplicar Poppins a todo */
-    html, body, [class*="css"], .stButton > button, .stMarkdown {
+    html, body, [class*="css"], .stButton > button {
         font-family: 'Poppins', sans-serif !important;
     }
 
-    .main {
-        background-color: #0e1117;
-    }
+    .main { background-color: #0e1117; }
 
-    /* Botón Maestro (Azul Snowflake) */
+    /* BOTÓN MAESTRO AZUL */
     div.stButton > button:first-child {
         background-color: #29b5e8 !important;
         color: white !important;
         border: none !important;
         font-weight: 600 !important;
-        padding: 0.8rem 1rem !important;
+        padding: 1rem !important;
         border-radius: 12px !important;
         text-transform: uppercase !important;
-        letter-spacing: 1px !important;
+        letter-spacing: 2px !important;
         width: 100% !important;
     }
-    
-    div.stButton > button:first-child:hover {
-        background-color: #1a9bc9 !important;
-        box-shadow: 0 4px 15px rgba(41, 181, 232, 0.4) !important;
-    }
 
-    /* Botones de Tareas Individuales (Borde Azul) */
+    /* BOTONES CUADRADOS */
     div.stButton > button {
         background-color: #1e2229 !important;
         color: #FFFFFF !important;
         border: 2px solid #29b5e8 !important;
         border-radius: 10px !important;
-        height: 3.5em !important;
+        aspect-ratio: 1 / 1 !important;
+        width: 100% !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
         transition: all 0.3s ease !important;
     }
     
     div.stButton > button:hover {
         background-color: #29b5e8 !important;
-        color: white !important;
-        transform: translateY(-2px) !important;
+        transform: scale(1.02) !important;
     }
 
-    /* Estilo de los Expanders (Mundos) */
+    /* CONSOLA TERMINAL */
+    .terminal-box {
+        background-color: #000000;
+        color: #29b5e8;
+        font-family: 'JetBrains Mono', monospace !important;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #29b5e8;
+        height: 250px;
+        overflow-y: auto;
+        font-size: 12px;
+        box-shadow: inset 0 0 10px rgba(41, 181, 232, 0.2);
+    }
+
+    /* EXPANDERS */
     .stExpander {
         border: 1px solid #29b5e8 !important;
-        border-radius: 12px !important;
         background-color: #161b22 !important;
-        margin-bottom: 15px !important;
-    }
-    
-    .stExpander p {
-        font-weight: 600 !important;
-        color: #29b5e8 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS (SIN ALTERACIONES) ---
+# --- ESTRUCTURA DE DATOS (RESTAURADA ORIGINAL) ---
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
     'account': 'hg51401',
@@ -334,11 +348,18 @@ TAREAS = [
     }
 ]
 
+# --- LÓGICA DE LOGS ---
+if 'terminal_logs' not in st.session_state:
+    st.session_state.terminal_logs = ["> Initializing SnowFlake Data Engine...", "> Ready to deploy."]
+
+def log(msg):
+    st.session_state.terminal_logs.append(f"[{time.strftime('%H:%M:%S')}] {msg}")
+
 # --- FUNCIONES CORE ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
-        results = drive_service.files().list(q=query, spaces='drive', corpora='allDrives', includeItemsFromAllDrives=True, supportsAllDrives=True, fields='files(id, name)').execute()
+        results = drive_service.files().list(q=query, fields='files(id, name)').execute()
         items = results.get('files', [])
         if not items: return None
         file_id = items[0]['id']
@@ -346,88 +367,77 @@ def get_sql_content(drive_service, file_name):
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
         done = False
-        while done is False: _, done = downloader.next_chunk()
+        while not done: _, done = downloader.next_chunk()
         return fh.getvalue().decode('utf-8')
-    except Exception as e:
-        st.error(f"Error Drive {file_name}: {e}")
-        return None
+    except: return None
 
 def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False, "SQL no encontrado"
+        if not query: return False, "SQL_MISSING"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
-        try:
-            wks = sh.worksheet(t["tab"])
-        except gspread.exceptions.WorksheetNotFound:
-            wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
+        try: wks = sh.worksheet(t["tab"])
+        except: wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True, f"Sync {t['tab']} OK"
-    except Exception as e:
-        return False, str(e)
+        return True, "SUCCESS"
+    except Exception as e: return False, str(e)
 
-# --- INICIO DE INTERFAZ ---
-st.title("❄️ Snowflake Data Sync Pro")
-st.write("Panel profesional de gestión de datos para Rappi.")
+# --- APP ---
+st.title("❄️ DATA SYNC PRO")
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
-    encoded_json = st.secrets["GOOGLE_BASE64"].strip()
-    decoded_bytes = base64.b64decode(encoded_json)
-    google_info = json.loads(decoded_bytes.decode('utf-8'))
-    
-    scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
-    creds = Credentials.from_service_account_info(google_info, scopes=scopes)
-    drive_service = build('drive', 'v3', credentials=creds)
-    gc = gspread.authorize(creds)
+    google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
+    creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
+    drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BOTÓN MAESTRO (TOTALMENTE AZUL)
-    if st.button("🚀 EJECUTAR PIPELINE COMPLETO"):
-        with st.status("Procesando todas las tareas...", expanded=True) as status:
-            conn = snowflake.connector.connect(**SF_PARAMS)
-            cs = conn.cursor()
-            for t in TAREAS:
-                st.write(f"🔄 Sincronizando: **{t['tab']}**")
-                success, msg = run_task(t, drive_service, gc, cs)
-                if not success: st.error(f"❌ {t['tab']}: {msg}")
-            cs.close()
-            conn.close()
-            status.update(label="✅ Sincronización terminada con éxito", state="complete")
+    # BOTÓN MAESTRO
+    if st.button("🔥 EXECUTE FULL PIPELINE"):
+        log("INICIANDO PROTOCOLO TOTAL...")
+        conn = snowflake.connector.connect(**SF_PARAMS)
+        cs = conn.cursor()
+        for t in TAREAS:
+            log(f"Sincronizando: {t['tab']}...")
+            ok, err = run_task(t, drive_service, gc, cs)
+            if ok: log(f"OK: {t['tab']}")
+            else: log(f"ERROR en {t['tab']}: {err}")
+        cs.close(); conn.close()
+        log("PIPELINE COMPLETADO.")
 
-    st.markdown("---")
+    # TERMINAL
+    st.markdown(f'<div class="terminal-box">{"<br>".join(st.session_state.terminal_logs[-12:])}</div>', unsafe_allow_html=True)
+    
+    st.divider()
 
-    # --- LÓGICA DE AGRUPACIÓN POR MUNDOS (ID DE SHEET) ---
+    # AGRUPACIÓN POR MUNDOS
     mundos = {}
     for tarea in TAREAS:
-        s_id = tarea["sheet"]
-        if s_id not in mundos:
-            mundos[s_id] = []
-        mundos[s_id].append(tarea)
+        sid = tarea["sheet"]
+        if sid not in mundos: mundos[sid] = []
+        mundos[sid].append(tarea)
 
-    # --- RENDERIZADO POR EXPANDERS (MUNDOS) ---
-    for num, (sheet_id, lista_tareas) in enumerate(mundos.items(), 1):
-        # Identificamos el mundo con un número y el ID abreviado
-        with st.expander(f"📁 Mundo {num} - Sheet ID: {sheet_id[:10]}..."):
-            st.write(f"Tareas vinculadas a esta hoja de cálculo: ({len(lista_tareas)})")
-            
-            # Botones internos en cuadrícula de 4
-            cols = st.columns(4)
-            for j, t in enumerate(lista_tareas):
-                with cols[j % 4]:
-                    if st.button(f"📥 {t['tab']}", key=f"btn_{t['tab']}_{num}", use_container_width=True):
-                        with st.spinner("Procesando..."):
-                            conn = snowflake.connector.connect(**SF_PARAMS)
-                            cs = conn.cursor()
-                            success, msg = run_task(t, drive_service, gc, cs)
-                            cs.close()
-                            conn.close()
-                            if success: st.toast(f"✅ {msg}")
-                            else: st.error(msg)
+    # RENDERIZADO
+    for sid, lista in mundos.items():
+        nombre = NOMBRES_MUNDOS.get(sid, f"Mundo ID: {sid[:8]}...")
+        with st.expander(f"📁 {nombre}"):
+            grid = st.columns(6)
+            for i, t in enumerate(lista):
+                with grid[i % 6]:
+                    if st.button(t['tab'], key=f"btn_{t['tab']}_{sid}"):
+                        log(f"Manual Override: {t['tab']}...")
+                        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+                        ok, err = run_task(t, drive_service, gc, cs)
+                        cs.close(); conn.close()
+                        if ok: log(f"OK: {t['tab']}"); st.toast("Success")
+                        else: log(f"FAIL: {err}"); st.error("Error")
 
 except Exception as e:
-    st.error(f"🚨 Initialization Error: {e}")
+    st.error(f"Boot Error: {e}")
+
+if st.sidebar.button("Clear Console"):
+    st.session_state.terminal_logs = ["> Console cleared."]; st.rerun()
