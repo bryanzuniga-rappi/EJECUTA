@@ -12,7 +12,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 # --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide")
+st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
 # 1. AQUÍ CAMBIAS LOS NOMBRES DE TUS MUNDOS (SHEETS)
@@ -27,69 +27,102 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Mundo 7 - Stock Bolsas"
 }
 
-# --- DISEÑO HACKER / SNOWFLAKE (CSS) ---
+# --- DISEÑO APPLE PREMIUM / SNOWFLAKE (CSS) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
 
     html, body, [class*="css"], .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
+        background-color: #000000 !important;
     }
 
-    .main { background-color: #0e1117; }
+    .stApp {
+        background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
+    }
 
-    /* BOTÓN MAESTRO AZUL */
+    /* HEADER LIMPIO FLOTANTE */
+    .app-header { 
+        display: flex; align-items: center; justify-content: center;
+        padding: 50px 0 30px 0; background: transparent !important; gap: 30px;
+    }
+    .big-snowflake { font-size: 6rem; color: #29b5e8; opacity: 0.8; }
+    .title-text-group { text-align: left; }
+    .app-header h1 { font-size: 3.2rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
+    .app-header p { color: #29b5e8; letter-spacing: 8px; font-size: 0.8rem; text-transform: uppercase; margin: 0 !important; }
+
+    /* BOTÓN MAESTRO: IZQUIERDA */
     div.stButton > button:first-child {
-        background-color: #29b5e8 !important;
+        background: #29b5e8 !important;
         color: white !important;
         border: none !important;
-        font-weight: 600 !important;
-        padding: 1rem !important;
         border-radius: 12px !important;
+        padding: 15px 40px !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 2px !important;
-    }
-
-    /* BOTONES CUADRADOS DE TAREAS */
-    div.stButton > button {
-        background-color: #1e2229 !important;
-        color: #29b5e8 !important;
-        border: 2px solid #29b5e8 !important;
-        border-radius: 15px !important;
-        aspect-ratio: 1 / 1 !important; /* Forza la forma cuadrada */
-        width: 100% !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
+        width: 350px !important;
         transition: all 0.3s ease !important;
-        margin-bottom: 10px;
+        box-shadow: 0 10px 25px rgba(41, 181, 232, 0.2) !important;
     }
-    
-    div.stButton > button:hover {
-        background-color: #29b5e8 !important;
-        color: white !important;
-        transform: scale(1.05) !important;
+    div.stButton > button:first-child:hover {
+        background: #3ac0f2 !important;
+        transform: translateY(-2px);
     }
 
-    /* CONSOLA TIPO TERMINAL */
+    /* BOTÓN LIMPIAR: DERECHA */
+    div.stButton > button[key="clear_log"] {
+        background: transparent !important;
+        color: #555 !important;
+        border: 1px solid #333 !important;
+        border-radius: 8px !important;
+        padding: 4px 15px !important;
+        font-size: 0.65rem !important;
+        float: right !important;
+    }
+
+    /* BOTONES TAREA RECTANGULARES 16:9 */
+    div.stButton > button {
+        background-color: rgba(255, 255, 255, 0.03) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 14px !important;
+        height: 75px !important;
+        width: 100% !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        display: block !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    div.stButton > button:hover {
+        border-color: #29b5e8 !important;
+        background: rgba(41, 181, 232, 0.05) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* CONSOLA AZUL SNOWFLAKE */
     .terminal-box {
-        background-color: #000000;
-        color: #00FF41; /* Verde Matrix */
+        background-color: #050505;
+        color: #29b5e8;
         font-family: 'JetBrains Mono', monospace !important;
         padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #333;
+        border-radius: 12px;
+        border: 1px solid #1a1a1a;
         height: 300px;
         overflow-y: auto;
         font-size: 13px;
         line-height: 1.5;
-        box-shadow: inset 0 0 10px #00FF41;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
 
     /* EXPANDERS */
     .stExpander {
-        border: 1px solid #29b5e8 !important;
-        border-radius: 12px !important;
-        background-color: #161b22 !important;
+        border: none !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-radius: 20px !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -137,7 +170,7 @@ TAREAS = [
 
 # --- INICIALIZAR HISTORIAL DE TERMINAL ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["> System initialized...", "> Waiting for commands..."]
+    st.session_state.logs = ["> SnowSync Kernel Online.", "> System Ready."]
 
 def add_log(text):
     timestamp = time.strftime("%H:%M:%S")
@@ -178,8 +211,8 @@ def run_task(t, drive_service, gc, cs):
     except Exception as e:
         return False, str(e)
 
-# --- APP START ---
-st.title("❄️ DATA SYNC PRO: COMMAND CENTER")
+# --- UI START ---
+st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><div class="title-text-group"><h1>SnowSync</h1><p>Enterprise Edition</p></div></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -193,28 +226,34 @@ try:
     gc = gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # --- BOTÓN MAESTRO ---
-    if st.button("EXECUTE ALL PROTOCOLS (MASTER SYNC)"):
-        add_log("ALERT: MASTER PIPELINE INITIATED")
-        conn = snowflake.connector.connect(**SF_PARAMS)
-        cs = conn.cursor()
-        for t in TAREAS:
-            add_log(f"RUNNING: {t['tab']}...")
-            success, msg = run_task(t, drive_service, gc, cs)
-            if success: add_log(f"OK: {t['tab']} sync completed.")
-            else: add_log(f"CRITICAL ERROR IN {t['tab']}: {msg}")
-        cs.close()
-        conn.close()
-        add_log("SYSTEM: ALL TASKS FINISHED")
+    # --- BARRA DE COMANDO ---
+    col_l, col_r = st.columns([3, 1])
+    with col_l:
+        if st.button("EJECUTAR MASIVO", key="masivo_btn"):
+            add_log("MASTER SYNC INITIATED...")
+            conn = snowflake.connector.connect(**SF_PARAMS)
+            cs = conn.cursor()
+            for t in TAREAS:
+                add_log(f"Syncing: {t['tab']}")
+                success, msg = run_task(t, drive_service, gc, cs)
+            cs.close()
+            conn.close()
+            add_log("GLOBAL PROTOCOL COMPLETED.")
+            st.rerun()
 
-    # --- TERMINAL BOX (HACKER STYLE) ---
+    with col_r:
+        if st.button("Limpiar Consola", key="clear_log"):
+            st.session_state.logs = ["> Logs flushed."]
+            st.rerun()
+
+    # --- TERMINAL BOX ---
     st.markdown(f'''
         <div class="terminal-box">
-            {"<br>".join(st.session_state.logs[-15:])}
+            {"<br>".join(st.session_state.logs[-12:])}
         </div>
     ''', unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # --- AGRUPACIÓN POR MUNDOS ---
     mundos = {}
@@ -225,33 +264,20 @@ try:
 
     # --- RENDERIZADO DE MUNDOS ---
     for s_id, lista in mundos.items():
-        # Busca el nombre personalizado o usa el ID por defecto
         nombre_mundo = NOMBRES_MUNDOS.get(s_id, f"Mundo ID: {s_id[:10]}...")
-        
-        with st.expander(f"📁 {nombre_mundo}"):
-            # Cuadrícula de botones cuadrados (6 columnas para que se vean compactos)
+        with st.expander(f"{nombre_mundo}"):
             cols = st.columns(6) 
             for j, t in enumerate(lista):
                 with cols[j % 6]:
-                    if st.button(t['tab'], key=f"square_{t['tab']}_{s_id}"):
-                        add_log(f"MANUAL OVERRIDE: {t['tab']}")
-                        with st.spinner("Executing..."):
-                            conn = snowflake.connector.connect(**SF_PARAMS)
-                            cs = conn.cursor()
-                            success, msg = run_task(t, drive_service, gc, cs)
-                            cs.close()
-                            conn.close()
-                            if success: 
-                                add_log(f"SYNC SUCCESS: {t['tab']}")
-                                st.toast("Success!")
-                            else: 
-                                add_log(f"ERROR: {msg}")
-                                st.error("Failed")
+                    if st.button(t['tab'], key=f"btn_{t['tab']}_{s_id}"):
+                        add_log(f"Manual Override: {t['tab']}")
+                        conn = snowflake.connector.connect(**SF_PARAMS)
+                        cs = conn.cursor()
+                        success, msg = run_task(t, drive_service, gc, cs)
+                        cs.close()
+                        conn.close()
+                        add_log(f"Process ended: {msg}")
+                        st.rerun()
 
 except Exception as e:
-    st.error(f"FATAL BOOT ERROR: {e}")
-
-# Botón para limpiar terminal
-if st.sidebar.button("Clear Terminal Logs"):
-    st.session_state.logs = ["> Logs cleared..."]
-    st.rerun()
+    st.error(f"FATAL ERROR: {e}")
