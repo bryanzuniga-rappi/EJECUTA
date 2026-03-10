@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE ULTIMATE (ESTABILIDAD SOBRE TODO) ---
+# --- CSS APPLE MINIMALISTA V6 ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -37,98 +37,128 @@ st.markdown("""
         background-color: #000000 !important;
     }
 
+    /* Fondo base con degradado sutil */
     .stApp {
-        background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
+        background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%) !important;
     }
 
-    /* HEADER LIMPIO */
+    /* TÍTULO LIMPIO (SIN RECUADRO) */
     .app-header { 
-        display: flex; align-items: center; justify-content: center;
-        padding: 50px 0 30px 0; background: transparent !important; gap: 25px;
-    }
-    .big-snowflake { font-size: 6rem; color: #29b5e8; opacity: 0.8; }
-    .title-text-group { text-align: left; }
-    .app-header h1 { font-size: 3.2rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
-    .app-header p { color: #29b5e8; letter-spacing: 8px; font-size: 0.8rem; text-transform: uppercase; margin: 0 !important; }
-
-    /* BARRA DE COMANDO */
-    .command-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-
-    /* BOTÓN MAESTRO IZQUIERDA */
-    div.stButton > button[key="masivo_btn"] {
-        background: #29b5e8 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 12px !important;
-        padding: 12px 40px !important;
-        font-size: 1rem !important;
-        font-weight: 600 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 2px !important;
-        width: 350px !important;
-        box-shadow: 0 10px 25px rgba(41, 181, 232, 0.2) !important;
-    }
-
-    /* BOTÓN LIMPIAR DERECHA PEQUEÑO */
-    div.stButton > button[key="clear_log"] {
+        text-align: center; 
+        padding: 60px 0 40px 0; 
         background: transparent !important;
-        color: #555 !important;
-        border: 1px solid #333 !important;
-        border-radius: 8px !important;
-        padding: 4px 15px !important;
-        font-size: 0.65rem !important;
-        text-transform: uppercase !important;
-        float: right !important;
+    }
+    .app-header h1 {
+        font-size: 3.5rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -2px !important;
+        color: #FFFFFF !important;
+        margin: 0 !important;
+        background: none !important;
+    }
+    .app-header p {
+        color: #29b5e8;
+        letter-spacing: 8px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-top: 5px !important;
+        opacity: 0.8;
     }
 
-    /* BOTONES TAREA RECTANGULARES 16:9 - FIX TEXTO VERTICAL */
+    /* BOTÓN MAESTRO: GHOST STYLE (MÁS PROFESIONAL) */
+    div.stButton > button:first-child {
+        background: transparent !important;
+        color: #29b5e8 !important;
+        border: 1px solid rgba(41, 181, 232, 0.5) !important;
+        border-radius: 100px !important;
+        padding: 12px 60px !important;
+        font-weight: 400 !important;
+        font-size: 0.9rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 3px !important;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+    
+    div.stButton > button:first-child:hover {
+        background: rgba(41, 181, 232, 0.1) !important;
+        border-color: #29b5e8 !important;
+        color: white !important;
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(41, 181, 232, 0.15) !important;
+    }
+
+    /* BOTONES DE TAREA: RECTANGULARES 16:9 LIMPIOS */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #d1d1d1 !important;
         border-radius: 12px !important;
-        height: 75px !important;
-        width: 100% !important;
+        height: 85px !important; 
+        width: 155px !important;
+        min-width: 155px !important;
+        max-width: 155px !important;
         font-size: 0.75rem !important;
-        font-weight: 500 !important;
+        font-weight: 400 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 10px !important;
         white-space: normal !important;
         word-wrap: break-word !important;
-        line-height: 1.2 !important;
         transition: all 0.3s ease !important;
+        margin: 0 auto !important;
     }
+    
     [data-testid="stColumn"] div.stButton > button:hover {
-        border-color: #29b5e8 !important;
         background: rgba(41, 181, 232, 0.05) !important;
+        border-color: rgba(41, 181, 232, 0.4) !important;
+        color: #ffffff !important;
+        transform: scale(1.04);
     }
 
-    /* CONSOLA AZUL */
-    .terminal-window {
-        background-color: #050505;
+    /* CONSOLA */
+    .console-card {
+        background: rgba(0, 0, 0, 0.2) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 15px;
+        padding: 15px;
+        font-family: 'JetBrains Mono', monospace;
         color: #29b5e8;
-        font-family: 'JetBrains Mono', monospace !important;
-        padding: 20px;
-        border: 1px solid #1a1a1a;
-        border-radius: 12px;
-        height: 250px;
+        height: 140px;
         overflow-y: auto;
-        margin-top: 10px;
+        margin: 40px auto;
+        max-width: 900px;
+        font-size: 0.75rem;
     }
-    .log-line { line-height: 1.6; font-size: 13px; margin: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.01); }
+
+    /* EXPANDERS */
+    .stExpander {
+        border: none !important;
+        background: rgba(255, 255, 255, 0.01) !important;
+        border-radius: 20px !important;
+        margin-bottom: 8px !important;
+    }
+    .stExpander summary { font-weight: 400 !important; color: #888 !important; font-size: 1rem !important; }
+    .stExpander summary:hover { color: white !important; }
+    
+    /* BOTÓN SYNC ALL MUNDO */
+    .mundo-sync-container button {
+        background: transparent !important;
+        color: #29b5e8 !important;
+        border: 1px solid rgba(41, 181, 232, 0.2) !important;
+        border-radius: 30px !important;
+        font-size: 0.7rem !important;
+        height: 32px !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# =========================================================
-# ESTRUCTURA DE DATOS ORIGINAL (NO TOCAR)
-# =========================================================
-SF_PARAMS = {
-    'user': 'bryan.zuniga@rappi.com',
-    'account': 'hg51401',
-    'authenticator': 'snowflake',
-    'warehouse': 'RP_PERSONALUSER_WH',
-    'database': 'FIVETRAN',
-    'schema': 'PUBLIC',
-    'role': 'RP_READ_ACCESS_PU_ROLE'
-}
+# --- ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS) ---
+SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
 
 TAREAS = [
     {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
@@ -161,20 +191,24 @@ TAREAS = [
 ]
 
 # --- LOGS ---
-if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online."]
+if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online"]
 def log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
-    query = f"name='{file_name}' and trashed=false"
-    results = drive_service.files().list(q=query, fields='files(id, name)').execute()
-    items = results.get('files', [])
-    if not items: return None
-    request = drive_service.files().get_media(fileId=items[0]['id'])
-    fh = io.BytesIO(); downloader = MediaIoBaseDownload(fh, request)
-    done = False
-    while not done: _, done = downloader.next_chunk()
-    return fh.getvalue().decode('utf-8')
+    try:
+        query = f"name='{file_name}' and trashed=false"
+        results = drive_service.files().list(q=query, fields='files(id, name)').execute()
+        items = results.get('files', [])
+        if not items: return None
+        file_id = items[0]['id']
+        request = drive_service.files().get_media(fileId=file_id)
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, request)
+        done = False
+        while not done: _, done = downloader.next_chunk()
+        return fh.getvalue().decode('utf-8')
+    except: return None
 
 def run_task(t, drive_service, gc, cs):
     try:
@@ -186,12 +220,13 @@ def run_task(t, drive_service, gc, cs):
         try: wks = sh.worksheet(t["tab"])
         except: wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
+        time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
         return True
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><div class="title-text-group"><h1>SnowSync</h1><p>Enterprise Edition</p></div></div>', unsafe_allow_html=True)
+st.markdown('<div class="app-header"><h1>SnowSync</h1><p>Enterprise Edition</p></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -200,50 +235,52 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE COMANDO
-    col_l, col_r = st.columns([3, 1])
-    with col_l:
-        btn_masivo = st.button("EJECUTAR MASIVO", key="masivo_btn")
-    with col_r:
-        if st.button("Clear Console", key="clear_log"):
-            st.session_state.logs = ["› Logs flushed."]; st.rerun()
-
-    # CONSOLA
-    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-10:]])
-    st.markdown(f'<div class="terminal-window">{log_content}</div>', unsafe_allow_html=True)
-
-    # EJECUCIÓN MASIVA (SECUENCIAL)
-    if btn_masivo:
+    # BOTÓN MAESTRO GHOST STYLE
+    if st.button("EJECUTAR MASIVO"):
+        log("MASTER SYNC INITIATED...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            log(f"Synced: {t['tab']}")
+            log(f"Updated: {t['tab']}")
         cs.close(); conn.close()
+        log("PIPELINE COMPLETE.")
         st.rerun()
 
-    # MUNDOS
+    # CONSOLA
+    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-6:])}</div>', unsafe_allow_html=True)
+
+    # AGRUPACIÓN
     mundos = {}
     for tarea in TAREAS:
         sid = tarea["sheet"]
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
+    # RENDERIZADO
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
-            if st.button(f"Sync World: {nombre}", key=f"m_{sid}"):
+            st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
+            if st.button(f"Sync Group: {nombre}", key=f"m_{sid}"):
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                for t in lista: run_task(t, drive_service, gc, cs)
-                cs.close(); conn.close(); log(f"Group {nombre} Done."); st.rerun()
+                for t in lista:
+                    run_task(t, drive_service, gc, cs)
+                cs.close(); conn.close()
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
             
             st.markdown("<br>", unsafe_allow_html=True)
-            cols = st.columns(6) 
+            
+            cols = st.columns(8) 
             for i, t in enumerate(lista):
-                with cols[i % 6]:
-                    if st.button(t['tab'].replace('_', ' '), key=f"btn_{t['tab']}_{sid}"):
+                with cols[i % 8]:
+                    clean_name = t['tab'].replace('_', ' ')
+                    if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         run_task(t, drive_service, gc, cs)
-                        cs.close(); conn.close(); log(f"Task {t['tab']} OK."); st.rerun()
+                        cs.close(); conn.close()
+                        st.toast(f"Success: {t['tab']}")
+                        st.rerun()
 
 except Exception as e:
-    st.error(f"Error: {e}")
+    st.error(f"Initialization Error: {e}")
