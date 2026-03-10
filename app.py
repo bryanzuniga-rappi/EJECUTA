@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE MINIMALISTA V6 ---
+# --- CSS APPLE ULTIMATE (MINIMALISMO & CONSOLA) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -37,16 +37,22 @@ st.markdown("""
         background-color: #000000 !important;
     }
 
-    /* Fondo base con degradado sutil */
     .stApp {
-        background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%) !important;
+        background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
     }
 
-    /* TÍTULO LIMPIO (SIN RECUADRO) */
+    /* TÍTULO LIMPIO Y GRAN LOGO */
     .app-header { 
         text-align: center; 
         padding: 60px 0 40px 0; 
         background: transparent !important;
+    }
+    .big-snowflake {
+        font-size: 5rem;
+        color: #29b5e8;
+        opacity: 0.6;
+        margin-bottom: 0px;
+        line-height: 1;
     }
     .app-header h1 {
         font-size: 3.5rem !important;
@@ -65,7 +71,7 @@ st.markdown("""
         opacity: 0.8;
     }
 
-    /* BOTÓN MAESTRO: GHOST STYLE (MÁS PROFESIONAL) */
+    /* BOTÓN GHOST EJECUTAR MASIVO */
     div.stButton > button:first-child {
         background: transparent !important;
         color: #29b5e8 !important;
@@ -80,7 +86,6 @@ st.markdown("""
         margin: 0 auto !important;
         display: block !important;
     }
-    
     div.stButton > button:first-child:hover {
         background: rgba(41, 181, 232, 0.1) !important;
         border-color: #29b5e8 !important;
@@ -89,7 +94,7 @@ st.markdown("""
         box-shadow: 0 0 25px rgba(41, 181, 232, 0.15) !important;
     }
 
-    /* BOTONES DE TAREA: RECTANGULARES 16:9 LIMPIOS */
+    /* BOTONES DE TAREA RECTANGULARES 16:9 */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -111,7 +116,6 @@ st.markdown("""
         transition: all 0.3s ease !important;
         margin: 0 auto !important;
     }
-    
     [data-testid="stColumn"] div.stButton > button:hover {
         background: rgba(41, 181, 232, 0.05) !important;
         border-color: rgba(41, 181, 232, 0.4) !important;
@@ -119,7 +123,7 @@ st.markdown("""
         transform: scale(1.04);
     }
 
-    /* CONSOLA */
+    /* CONSOLA GLASSMORPHISM */
     .console-card {
         background: rgba(0, 0, 0, 0.2) !important;
         backdrop-filter: blur(10px);
@@ -135,7 +139,7 @@ st.markdown("""
         font-size: 0.75rem;
     }
 
-    /* EXPANDERS */
+    /* EXPANDERS MUNDOS */
     .stExpander {
         border: none !important;
         background: rgba(255, 255, 255, 0.01) !important;
@@ -158,7 +162,15 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS) ---
-SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
+SF_PARAMS = {
+    'user': 'bryan.zuniga@rappi.com',
+    'account': 'hg51401',
+    'authenticator': 'snowflake',
+    'warehouse': 'RP_PERSONALUSER_WH',
+    'database': 'FIVETRAN',
+    'schema': 'PUBLIC',
+    'role': 'RP_READ_ACCESS_PU_ROLE'
+}
 
 TAREAS = [
     {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
@@ -190,9 +202,12 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LOGS ---
-if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online"]
-def log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
+# --- SESSION LOGS ---
+if 'logs' not in st.session_state:
+    st.session_state.logs = ["> SnowSync Kernel initialized."]
+
+def add_log(msg):
+    st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
@@ -226,7 +241,7 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1><p>Enterprise Edition</p></div>', unsafe_allow_html=True)
+st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><h1>SnowSync</h1><p>Enterprise Edition</p></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -237,16 +252,15 @@ try:
 
     # BOTÓN MAESTRO GHOST STYLE
     if st.button("EJECUTAR MASIVO"):
-        log("MASTER SYNC INITIATED...")
+        add_log("MASTER PROTOCOL INITIATED...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            log(f"Updated: {t['tab']}")
+            add_log(f"Synced: {t['tab']}")
         cs.close(); conn.close()
-        log("PIPELINE COMPLETE.")
         st.rerun()
 
-    # CONSOLA
+    # CONSOLA HACKER
     st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-6:])}</div>', unsafe_allow_html=True)
 
     # AGRUPACIÓN
@@ -261,7 +275,8 @@ try:
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
             st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
-            if st.button(f"Sync Group: {nombre}", key=f"m_{sid}"):
+            if st.button(f"Ejecutar {nombre} Completo", key=f"m_{sid}"):
+                add_log(f"Group Sync: {nombre}")
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                 for t in lista:
                     run_task(t, drive_service, gc, cs)
@@ -276,10 +291,10 @@ try:
                 with cols[i % 8]:
                     clean_name = t['tab'].replace('_', ' ')
                     if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
+                        add_log(f"Override: {t['tab']}")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
-                        st.toast(f"Success: {t['tab']}")
                         st.rerun()
 
 except Exception as e:
