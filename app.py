@@ -18,110 +18,120 @@ st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide"
 # CONFIGURACIÓN DE NOMBRES DE MUNDOS
 # =========================================================
 NOMBRES_MUNDOS = {
-    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "1. Operaciones CH",
-    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "2. Golden Dani",
-    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "3. SKUs",
-    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "4. AVL",
-    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "5. Históricos",
-    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "6. Inventarios",
-    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "7. Bolsas"
+    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Operaciones CH",
+    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Golden Dani",
+    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "SKUs",
+    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "AVL",
+    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "Históricos",
+    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "Inventarios",
+    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bolsas"
 }
 
-# --- DISEÑO ULTRA TOP (GLASSMORPHISM & APPLE STYLE) ---
+# --- CSS APPLE STYLE V3 (ULTRA TOP) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-    /* Variables de Estilo */
-    :root {
-        --sf-blue: #29b5e8;
-        --glass-bg: rgba(255, 255, 255, 0.03);
-        --glass-border: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Reset General */
+    /* Fuente y Fondo Base */
     html, body, [class*="css"] {
         font-family: 'Poppins', sans-serif !important;
-        background-color: #050505 !important;
-        color: #ffffff;
+        background-color: #000000 !important;
     }
 
-    /* Contenedor de la Terminal (Estilo Terminal Integrada) */
-    .terminal-container {
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        padding: 15px;
-        margin-top: 20px;
-        font-family: 'JetBrains Mono', monospace;
-        color: #a0a0a0;
-        font-size: 0.85rem;
-        height: 200px;
-        overflow-y: auto;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    .stApp {
+        background: radial-gradient(circle at top right, #0a192f, #000000);
     }
-    .log-entry { margin-bottom: 4px; border-left: 2px solid var(--sf-blue); padding-left: 10px; }
-    .log-success { color: #4ade80; }
-    .log-error { color: #f87171; }
 
-    /* Botón Maestro (Grande y Minimalista) */
-    div.stButton > button:first-child {
-        background: linear-gradient(135deg, #29b5e8 0%, #1a89b3 100%) !important;
-        color: white !important;
-        border: none !important;
-        padding: 20px !important;
-        border-radius: 14px !important;
+    /* TITULO MINIMALISTA */
+    h1 {
+        font-weight: 600 !important;
+        letter-spacing: -1.5px !important;
+        font-size: 3rem !important;
+        background: -webkit-linear-gradient(#fff, #888);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0px !important;
+    }
+
+    /* EL BOTON MAESTRO (REDISEÑO TOTAL) */
+    .stButton > button:first-child {
+        background: rgba(41, 181, 232, 0.1) !important;
+        color: #29b5e8 !important;
+        border: 1px solid rgba(41, 181, 232, 0.4) !important;
+        padding: 1.5rem 2rem !important;
+        border-radius: 50px !important;
         font-weight: 500 !important;
-        font-size: 1rem !important;
-        letter-spacing: 0.5px !important;
-        box-shadow: 0 10px 20px rgba(41, 181, 232, 0.2) !important;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-    }
-    div.stButton > button:first-child:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 15px 30px rgba(41, 181, 232, 0.4) !important;
+        font-size: 1.1rem !important;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        text-transform: none !important;
+        letter-spacing: 0px !important;
+        margin: 20px auto !important;
+        display: block !important;
+        width: fit-content !important;
     }
 
-    /* Botones de Tarea (Cuadrados de Cristal) */
-    [data-testid="stVerticalBlock"] div.stButton > button {
-        background: var(--glass-bg) !important;
-        border: 1px solid var(--glass-border) !important;
-        color: #e0e0e0 !important;
-        border-radius: 12px !important;
+    .stButton > button:first-child:hover {
+        background: #29b5e8 !important;
+        color: white !important;
+        border: 1px solid #29b5e8 !important;
+        box-shadow: 0 0 30px rgba(41, 181, 232, 0.4) !important;
+        transform: scale(1.02) !important;
+    }
+
+    /* BOTONES CUADRADOS DE TAREA (ESTILO APPLE CARD) */
+    [data-testid="stColumn"] div.stButton > button {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(15px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+        border-radius: 18px !important;
         aspect-ratio: 1 / 1 !important;
         width: 100% !important;
-        font-size: 0.75rem !important;
+        font-size: 0.85rem !important;
         font-weight: 400 !important;
-        transition: all 0.3s ease !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    [data-testid="stVerticalBlock"] div.stButton > button:hover {
-        background: rgba(41, 181, 232, 0.1) !important;
-        border-color: var(--sf-blue) !important;
-        color: var(--sf-blue) !important;
-        transform: scale(1.02);
+        transition: all 0.4s ease !important;
     }
 
-    /* Expanders Estilo Card */
-    .stExpander {
-        background: transparent !important;
-        border: 1px solid var(--glass-border) !important;
-        border-radius: 16px !important;
-        margin-bottom: 20px !important;
-        overflow: hidden;
+    [data-testid="stColumn"] div.stButton > button:hover {
+        border-color: rgba(41, 181, 232, 0.8) !important;
+        background: rgba(41, 181, 232, 0.05) !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4) !important;
     }
-    .stExpander summary { background-color: var(--glass-bg) !important; padding: 10px 20px !important; }
+
+    /* TERMINAL GLASSMORPHISM */
+    .terminal-output {
+        background: rgba(255, 255, 255, 0.02) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 20px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: #888;
+        height: 180px;
+        overflow-y: auto;
+        margin-bottom: 40px;
+    }
+
+    /* EXPANDERS SIN BORDES GRUESOS */
+    .stExpander {
+        border: none !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-radius: 24px !important;
+        margin-bottom: 10px !important;
+    }
     
-    /* Titulos */
-    h1 { font-weight: 600 !important; font-size: 2.2rem !important; margin-bottom: 0px !important; }
-    p { opacity: 0.7; }
+    .stExpander summary {
+        padding: 1.2rem !important;
+        color: #aaa !important;
+    }
+
+    /* DIVIDER SUTIL */
+    hr { border-top: 1px solid rgba(255,255,255,0.05) !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS (RESTAURADA ORIGINAL) ---
+# --- TAREAS (ESTRUCTURA ORIGINAL INTACTA) ---
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
     'account': 'hg51401',
@@ -378,15 +388,14 @@ TAREAS = [
     }
 ]
 
-# --- LÓGICA DE TERMINAL ---
+# --- SESSION LOGS ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["Ready to sync."]
+    st.session_state.logs = ["› Protocol standby."]
 
-def log(msg, type="info"):
-    cl = "log-success" if type == "success" else "log-error" if type == "error" else ""
-    st.session_state.logs.append(f'<div class="log-entry {cl}">[{time.strftime("%H:%M:%S")}] {msg}</div>')
+def add_log(msg):
+    st.session_state.logs.append(f"› {msg}")
 
-# --- FUNCIONES CORE ---
+# --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
@@ -406,23 +415,21 @@ def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False, "SQL_ERROR"
+        if not query: return False, "MISSING_SQL"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
         try: wks = sh.worksheet(t["tab"])
         except: wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
-        time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True, "SYNC_OK"
+        return True, "SUCCESS"
     except Exception as e: return False, str(e)
 
-# --- APP UI ---
-st.markdown("<h1>Snowflake Data Sync</h1>", unsafe_allow_html=True)
-st.write("Sincronización automatizada de datos a nivel empresarial.")
+# --- UI START ---
+st.markdown("<h1>Data Sync <span style='color:#29b5e8; font-weight:300;'>Pro</span></h1>", unsafe_allow_html=True)
+st.write("Sincronización profesional de inteligencia de datos.")
 
 try:
-    # Carga automática de llaves
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
     google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
     creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
@@ -430,21 +437,19 @@ try:
     SF_PARAMS['password'] = sf_token
 
     # BOTÓN MAESTRO
-    if st.button("EXECUTE ALL PIPELINES"):
-        log("Initiating Master Control Pipeline...")
+    if st.button("Initialize Full Pipeline"):
+        add_log("Broadcasting master sync protocol...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
-            log(f"Processing: {t['tab']}...")
+            add_log(f"Processing {t['tab']}...")
             ok, msg = run_task(t, drive_service, gc, cs)
-            if ok: log(f"Verified: {t['tab']}", "success")
-            else: log(f"Fail: {t['tab']} - {msg}", "error")
+            if ok: add_log(f"Successfully synced {t['tab']}")
+            else: add_log(f"Error in {t['tab']}: {msg}")
         cs.close(); conn.close()
-        log("Master Pipeline Execution Finished.", "success")
+        add_log("Task complete.")
 
     # TERMINAL INTEGRADA
-    st.markdown(f'<div class="terminal-container">{"".join(st.session_state.logs[-10:])}</div>', unsafe_allow_html=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f'<div class="terminal-output">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
 
     # AGRUPACIÓN POR MUNDOS
     mundos = {}
@@ -453,20 +458,20 @@ try:
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO POR EXPANDERS
+    # RENDERIZADO POR MUNDOS
     for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset: {sid[:8]}...")
-        with st.expander(f"📦 {nombre}"):
-            grid = st.columns(8) # Más compacto: 8 botones por fila
+        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
+        with st.expander(f"{nombre}"):
+            cols = st.columns(10) # 10 botones por fila para máxima limpieza
             for i, t in enumerate(lista):
-                with grid[i % 8]:
-                    if st.button(t['tab'], key=f"t_{t['tab']}"):
-                        log(f"Manual Sync: {t['tab']}...")
+                with cols[i % 10]:
+                    if st.button(t['tab'], key=f"t_{t['tab']}_{sid}"):
+                        add_log(f"Overriding {t['tab']}...")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         ok, msg = run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
-                        if ok: log(f"Success: {t['tab']}", "success"); st.toast("OK")
-                        else: log(f"Error: {msg}", "error"); st.error("Fail")
+                        if ok: add_log(f"Done."); st.toast("OK")
+                        else: add_log(f"Error: {msg}")
 
 except Exception as e:
-    st.error(f"System boot failed: {e}")
+    st.error(f"Initialization error: {e}")
