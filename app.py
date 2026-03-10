@@ -16,7 +16,7 @@ from googleapiclient.http import MediaIoBaseDownload
 st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
-# 1. NOMBRES DE MUNDOS (LIMPIOS)
+# CONFIGURACIÓN DE NOMBRES DE MUNDOS
 # =========================================================
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "OPERACIONES CH",
@@ -28,7 +28,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY"
 }
 
-# --- CSS APPLE V16 (BOTONES ESTÁNDAR & TEXTO CENTRADO) ---
+# --- CSS APPLE V17 (ESTANDARIZACIÓN TOTAL & FIX ESTRUCTURA) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
@@ -52,21 +52,20 @@ st.markdown("""
     .app-header h1 { font-size: 2.8rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BOTÓN MAESTRO */
+    /* BARRA DE COMANDO */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
-        border: none !important;
         border-radius: 10px !important;
         padding: 10px 40px !important;
         font-size: 0.9rem !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
+        letter-spacing: 2px !important;
         width: auto !important;
         min-width: 250px;
     }
 
-    /* BOTÓN LIMPIAR */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -77,33 +76,30 @@ st.markdown("""
         float: right !important;
     }
 
-    /* ESTANDARIZACIÓN DE BOTONES EN DESPLEGABLES */
+    /* BOTONES INTERNOS: ESTANDARIZACIÓN 16:9 */
     [data-testid="stExpander"] div.stButton > button {
         background-color: rgba(255, 255, 255, 0.03) !important;
         color: #ffffff !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 12px !important;
         
-        /* Geometría Fija Estricta */
+        /* Geometría Fija */
         height: 75px !important;
         min-height: 75px !important;
         max-height: 75px !important;
         width: 100% !important;
         
-        /* Centrado Total */
+        /* Centrado */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
         
-        /* Tipografía */
         font-size: 11px !important;
-        font-weight: 500 !important;
         text-transform: uppercase;
         line-height: 1.1 !important;
         padding: 8px !important;
 
-        /* Prevención de desbordamiento */
         overflow: hidden !important;
         white-space: normal !important;
         word-wrap: break-word !important;
@@ -112,7 +108,6 @@ st.markdown("""
     [data-testid="stExpander"] div.stButton > button:hover {
         border-color: #29b5e8 !important;
         background: rgba(41, 181, 232, 0.1) !important;
-        transform: translateY(-2px);
     }
 
     /* CONSOLA */
@@ -126,7 +121,6 @@ st.markdown("""
         height: 280px;
         overflow-y: auto;
         font-size: 13px;
-        line-height: 1.4;
     }
     .cursor {
         display: inline-block;
@@ -135,16 +129,15 @@ st.markdown("""
         background-color: #29b5e8;
         margin-left: 4px;
         animation: blink 1s infinite;
-        vertical-align: middle;
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    .stExpander { border: none !important; background: rgba(255, 255, 255, 0.015) !important; border-radius: 15px !important; margin-bottom: 10px; }
+    .stExpander { border: none !important; background: rgba(255, 255, 255, 0.015) !important; border-radius: 15px !important; }
     </style>
     """, unsafe_allow_html=True)
 
 # =========================================================
-# ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS)
+# ESTRUCTURA DE DATOS ORIGINAL (RESPETADA AL 100%)
 # =========================================================
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
@@ -157,40 +150,255 @@ SF_PARAMS = {
 }
 
 TAREAS = [
-    {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "DOI_TIENDA_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "DOI_TIENDA_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "SALES_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "SALES_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "GOLDEN_DANI.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "Summary Golden", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_WAREHOUSE.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "WAREHOUSE_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_COUNTRY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "COUNTRY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_PRODUCT.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "PRODUCT_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_CITY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "CITY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_DETAIL.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "DETAIL_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_CATEGORY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "CATEGORY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_SUPPLIER.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "SUPPLIER_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_SIN_CH.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "SIN_CH_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_MODEL.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "MODEL_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_ABS.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "ABS_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_WEEK.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "WEEK_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "SKUS_X_DIA.sql", "sheet": "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0", "tab": "SKUS", "c_start": "A1", "c_end": "E", "p_row": 1, "p_col": 1},
-    {"sql": "AVL_GOLDEN_DANI.sql", "sheet": "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA", "tab": "AVL", "c_start": "A1", "c_end": "C", "p_row": 1, "p_col": 1},
-    {"sql": "DOI_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "DOI", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "WH_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "WH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "CITY_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "CITY", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "SUPPLIER_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "SUPPLIER", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "PRODUCT_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "PRODUCT", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "TODAY_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "CURRENT", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "DETAIL.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "DETAIL", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "ROQ_PO.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "ROQ_PO", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "INVENTARIOS_DOS_DUENOS.sql", "sheet": "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU", "tab": "BASE", "c_start": "A1", "c_end": "L", "p_row": 1, "p_col": 1},
-    {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
+    {
+        "sql": "STOCK_CH.sql",
+        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
+        "tab": "STOCK_CH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "DOI_TIENDA_CH.sql",
+        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
+        "tab": "DOI_TIENDA_CH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "SALES_CH.sql",
+        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
+        "tab": "SALES_CH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "GOLDEN_DANI.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "Summary Golden",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_WAREHOUSE.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "WAREHOUSE_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_COUNTRY.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "COUNTRY_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_PRODUCT.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "PRODUCT_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_CITY.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "CITY_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_DETAIL.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "DETAIL_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_CATEGORY.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "CATEGORY_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_SUPPLIER.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "SUPPLIER_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_SIN_CH.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "SIN_CH_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_MODEL.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "MODEL_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_ABS.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "ABS_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_WEEK.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "WEEK_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "SKUS_X_DIA.sql",
+        "sheet": "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0",
+        "tab": "SKUS",
+        "c_start": "A1",
+        "c_end": "E",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_DANI.sql",
+        "sheet": "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA",
+        "tab": "AVL",
+        "c_start": "A1",
+        "c_end": "C",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "DOI_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "DOI",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "WH_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "WH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "CITY_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "CITY",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "SUPPLIER_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "SUPPLIER",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "PRODUCT_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "PRODUCT",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "TODAY_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "CURRENT",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "DETAIL.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "DETAIL",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "ROQ_PO.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "ROQ_PO",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "INVENTARIOS_DOS_DUENOS.sql",
+        "sheet": "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU",
+        "tab": "BASE",
+        "c_start": "A1",
+        "c_end": "L",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "STOCK_BOLSAS.sql",
+        "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0",
+        "tab": "BASE",
+        "c_start": "A1",
+        "c_end": "X",
+        "p_row": 1,
+        "p_col": 1
+    }
 ]
 
 # --- LÓGICA DE LOGS (UTC-6) ---
 if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online."]
 
 def add_log(msg):
-    # Ajuste manual a UTC-6
     mx_time = datetime.utcnow() - timedelta(hours=6)
     timestamp = mx_time.strftime("%H:%M:%S")
     st.session_state.logs.append(f"› {timestamp} | {msg}")
@@ -248,7 +456,7 @@ try:
             st.rerun()
 
     with col_r:
-        if st.button("Limpiar Consola", key="clear_log"):
+        if st.button("Clear Console", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
 
     # CONSOLA
