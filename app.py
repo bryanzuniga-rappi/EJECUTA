@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE ULTIMATE (FIEL AL DISEÑO, RESPETUOSO CON LA EJECUCIÓN) ---
+# --- CSS APPLE ULTIMATE (ESTABILIDAD SOBRE TODO) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -41,33 +41,35 @@ st.markdown("""
         background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
     }
 
-    /* HEADER SIN RECUADROS */
+    /* HEADER LIMPIO */
     .app-header { 
         display: flex; align-items: center; justify-content: center;
-        padding: 50px 0 30px 0; background: transparent !important; gap: 30px;
+        padding: 50px 0 30px 0; background: transparent !important; gap: 25px;
     }
     .big-snowflake { font-size: 6rem; color: #29b5e8; opacity: 0.8; }
     .title-text-group { text-align: left; }
     .app-header h1 { font-size: 3.2rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 8px; font-size: 0.8rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BOTÓN MAESTRO: GRANDE IZQUIERDA */
+    /* BARRA DE COMANDO */
+    .command-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+    /* BOTÓN MAESTRO IZQUIERDA */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
         border: none !important;
         border-radius: 12px !important;
-        padding: 15px 45px !important;
+        padding: 12px 40px !important;
         font-size: 1rem !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 2px !important;
         width: 350px !important;
-        display: block !important;
         box-shadow: 0 10px 25px rgba(41, 181, 232, 0.2) !important;
     }
 
-    /* BOTÓN LIMPIAR: PEQUEÑO DERECHA */
+    /* BOTÓN LIMPIAR DERECHA PEQUEÑO */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -79,24 +81,27 @@ st.markdown("""
         float: right !important;
     }
 
-    /* BOTONES TAREA: 16:9 RECTANGULAR HORIZONTAL */
+    /* BOTONES TAREA RECTANGULARES 16:9 - FIX TEXTO VERTICAL */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         color: #ffffff !important;
-        border-radius: 14px !important;
+        border-radius: 12px !important;
         height: 75px !important;
         width: 100% !important;
         font-size: 0.75rem !important;
         font-weight: 500 !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.2 !important;
         transition: all 0.3s ease !important;
-        display: block !important;
+    }
+    [data-testid="stColumn"] div.stButton > button:hover {
+        border-color: #29b5e8 !important;
+        background: rgba(41, 181, 232, 0.05) !important;
     }
 
-    /* CONSOLA AZUL SNOWFLAKE */
+    /* CONSOLA AZUL */
     .terminal-window {
         background-color: #050505;
         color: #29b5e8;
@@ -107,14 +112,13 @@ st.markdown("""
         height: 250px;
         overflow-y: auto;
         margin-top: 10px;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
     .log-line { line-height: 1.6; font-size: 13px; margin: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.01); }
     </style>
     """, unsafe_allow_html=True)
 
 # =========================================================
-# ESTRUCTURA DE DATOS ORIGINAL (ESTRICTAMENTE IGUAL)
+# ESTRUCTURA DE DATOS ORIGINAL (NO TOCAR)
 # =========================================================
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
@@ -127,259 +131,40 @@ SF_PARAMS = {
 }
 
 TAREAS = [
-    {
-        "sql": "STOCK_CH.sql",
-        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
-        "tab": "STOCK_CH",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "DOI_TIENDA_CH.sql",
-        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
-        "tab": "DOI_TIENDA_CH",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "SALES_CH.sql",
-        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
-        "tab": "SALES_CH",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "GOLDEN_DANI.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "Summary Golden",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_WAREHOUSE.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "WAREHOUSE_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_COUNTRY.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "COUNTRY_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_PRODUCT.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "PRODUCT_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_CITY.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "CITY_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_DETAIL.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "DETAIL_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_CATEGORY.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "CATEGORY_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_SUPPLIER.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "SUPPLIER_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_SIN_CH.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "SIN_CH_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_MODEL.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "MODEL_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_ABS.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "ABS_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_WEEK.sql",
-        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
-        "tab": "WEEK_AVL",
-        "c_start": "A3",
-        "c_end": "N",
-        "p_row": 3,
-        "p_col": 1
-    },
-    {
-        "sql": "SKUS_X_DIA.sql",
-        "sheet": "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0",
-        "tab": "SKUS",
-        "c_start": "A1",
-        "c_end": "E",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "AVL_GOLDEN_DANI.sql",
-        "sheet": "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA",
-        "tab": "AVL",
-        "c_start": "A1",
-        "c_end": "C",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "DOI_BY_DAY.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "DOI",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "WH_BY_DAY.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "WH",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "CITY_BY_DAY.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "CITY",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "SUPPLIER_BY_DAY.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "SUPPLIER",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "PRODUCT_BY_DAY.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "PRODUCT",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "TODAY_BY_DAY.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "CURRENT",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "DETAIL.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "DETAIL",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "ROQ_PO.sql",
-        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
-        "tab": "ROQ_PO",
-        "c_start": "A1",
-        "c_end": "F",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "INVENTARIOS_DOS_DUENOS.sql",
-        "sheet": "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU",
-        "tab": "BASE",
-        "c_start": "A1",
-        "c_end": "L",
-        "p_row": 1,
-        "p_col": 1
-    },
-    {
-        "sql": "STOCK_BOLSAS.sql",
-        "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0",
-        "tab": "BASE",
-        "c_start": "A1",
-        "c_end": "X",
-        "p_row": 1,
-        "p_col": 1
-    }
+    {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "DOI_TIENDA_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "DOI_TIENDA_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "SALES_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "SALES_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "GOLDEN_DANI.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "Summary Golden", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_WAREHOUSE.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "WAREHOUSE_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_COUNTRY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "COUNTRY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_PRODUCT.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "PRODUCT_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_CITY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "CITY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_DETAIL.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "DETAIL_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_CATEGORY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "CATEGORY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_SUPPLIER.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "SUPPLIER_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_SIN_CH.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "SIN_CH_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_MODEL.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "MODEL_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_ABS.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "ABS_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "AVL_GOLDEN_WEEK.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "WEEK_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
+    {"sql": "SKUS_X_DIA.sql", "sheet": "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0", "tab": "SKUS", "c_start": "A1", "c_end": "E", "p_row": 1, "p_col": 1},
+    {"sql": "AVL_GOLDEN_DANI.sql", "sheet": "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA", "tab": "AVL", "c_start": "A1", "c_end": "C", "p_row": 1, "p_col": 1},
+    {"sql": "DOI_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "DOI", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "WH_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "WH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "CITY_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "CITY", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "SUPPLIER_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "SUPPLIER", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "PRODUCT_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "PRODUCT", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "TODAY_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "CURRENT", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "DETAIL.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "DETAIL", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "ROQ_PO.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "ROQ_PO", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
+    {"sql": "INVENTARIOS_DOS_DUENOS.sql", "sheet": "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU", "tab": "BASE", "c_start": "A1", "c_end": "L", "p_row": 1, "p_col": 1},
+    {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LÓGICA DE LOGS (ESTABLE) ---
-if 'logs' not in st.session_state:
-    st.session_state.logs = ["› SnowSync Kernel Ready."]
+# --- LOGS ---
+if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online."]
+def log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
-def log(msg):
-    st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
-
-# --- CORE FUNCTIONS (ORIGINALES E INFALIBLES) ---
+# --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
     query = f"name='{file_name}' and trashed=false"
     results = drive_service.files().list(q=query, fields='files(id, name)').execute()
@@ -415,25 +200,26 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # COMANDOS
-    col_masivo, col_clear = st.columns([3, 1])
-    with col_masivo:
+    # BARRA DE COMANDO
+    col_l, col_r = st.columns([3, 1])
+    with col_l:
         btn_masivo = st.button("EJECUTAR MASIVO", key="masivo_btn")
-    with col_clear:
-        if st.button("Limpiar Consola", key="clear_log"):
+    with col_r:
+        if st.button("Clear Console", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
 
     # CONSOLA
-    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-12:]])
+    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-10:]])
     st.markdown(f'<div class="terminal-window">{log_content}</div>', unsafe_allow_html=True)
 
-    # LÓGICA MASIVA (SIN INTERRUPCIONES DE RERUN)
+    # EJECUCIÓN MASIVA (SECUENCIAL)
     if btn_masivo:
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            log(f"Synced: {t['tab']} OK")
-        cs.close(); conn.close(); st.rerun()
+            log(f"Synced: {t['tab']}")
+        cs.close(); conn.close()
+        st.rerun()
 
     # MUNDOS
     mundos = {}
@@ -445,7 +231,7 @@ try:
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
-            if st.button(f"Sync Group: {nombre}", key=f"m_{sid}"):
+            if st.button(f"Sync World: {nombre}", key=f"m_{sid}"):
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                 for t in lista: run_task(t, drive_service, gc, cs)
                 cs.close(); conn.close(); log(f"Group {nombre} Done."); st.rerun()
