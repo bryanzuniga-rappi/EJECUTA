@@ -15,22 +15,22 @@ from googleapiclient.http import MediaIoBaseDownload
 st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS
+# CONFIGURACIÓN DE NOMBRES DE MUNDOS (LIMPIOS SIN EMOJIS)
 # =========================================================
 NOMBRES_MUNDOS = {
-    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Mundo 1 - Operaciones CH",
-    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Mundo 2 - Golden Dani",
-    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "Mundo 3 - SKU Management",
-    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "Mundo 4 - AVL Dani",
-    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "Mundo 5 - Histórico Diario",
-    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "Mundo 6 - Inventarios Dos Dueños",
-    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Mundo 7 - Stock Bolsas"
+    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "OPERACIONES CH",
+    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "GOLDEN ENGINE",
+    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "SKU MANAGEMENT",
+    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "AVL ANALYTICS",
+    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "DAILY RECORDS",
+    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "MASTER STOCKS",
+    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY"
 }
 
-# --- CSS APPLE V13 (PRECISIÓN DE BOTONES & CURSOR) ---
+# --- CSS APPLE V14 (RELIABLE & ENTERPRISE) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
 
     html, body, [class*="css"], .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
@@ -51,19 +51,19 @@ st.markdown("""
     .app-header h1 { font-size: 2.8rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BARRA DE COMANDO (AJUSTE DE TAMAÑO) */
+    /* BARRA DE COMANDO */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
         border: none !important;
         border-radius: 10px !important;
-        padding: 8px 30px !important; /* Menos gigante */
+        padding: 10px 40px !important;
         font-size: 0.9rem !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
+        letter-spacing: 2px !important;
         width: auto !important;
-        min-width: 200px;
-        transition: all 0.3s ease !important;
+        min-width: 250px;
     }
 
     div.stButton > button[key="clear_log"] {
@@ -76,29 +76,31 @@ st.markdown("""
         float: right !important;
     }
 
-    /* BOTONES TAREA: 4 POR FILA (RECALIBRADOS) */
+    /* BOTONES TAREA RECTANGULARES CONSISTENTES */
     [data-testid="stColumn"] div.stButton > button {
         background-color: rgba(255, 255, 255, 0.03) !important;
         color: #ffffff !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 12px !important;
-        height: 70px !important; /* Proporción 16:9 aprox */
+        height: 80px !important; /* Altura fija para consistencia */
         width: 100% !important;
-        font-size: 12px !important;
+        font-size: 13px !important;
         font-weight: 500 !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        line-height: 1.1 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        transition: all 0.3s ease !important;
     }
+    
     [data-testid="stColumn"] div.stButton > button:hover {
         border-color: #29b5e8 !important;
-        background: rgba(41, 181, 232, 0.05) !important;
+        background: rgba(41, 181, 232, 0.08) !important;
+        transform: translateY(-2px);
     }
 
-    /* CONSOLA CON CURSOR PARPADEANTE */
+    /* CONSOLA */
     .terminal-box {
         background-color: #050505;
         color: #29b5e8;
@@ -110,7 +112,6 @@ st.markdown("""
         overflow-y: auto;
         font-size: 13px;
         line-height: 1.4;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
     .cursor {
         display: inline-block;
@@ -123,12 +124,14 @@ st.markdown("""
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* EXPANDERS */
+    /* EXPANDERS SIN ICONOS */
     .stExpander {
         border: none !important;
         background: rgba(255, 255, 255, 0.015) !important;
         border-radius: 15px !important;
+        margin-bottom: 12px !important;
     }
+    .stExpander summary { font-weight: 600 !important; letter-spacing: 1px; color: #eee !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -225,7 +228,7 @@ try:
         if st.button("Limpiar Consola", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
 
-    # CONSOLA CON CURSOR PARPADEANTE
+    # CONSOLA CON CURSOR
     log_content = "<br>".join(st.session_state.logs[-12:])
     st.markdown(f'<div class="terminal-box">{log_content}<span class="cursor"></span></div>', unsafe_allow_html=True)
 
@@ -245,15 +248,10 @@ try:
         mundos[sid].append(tarea)
 
     for sid, lista in mundos.items():
-        nombre_mundo = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:8]}")
-        with st.expander(f"📁 {nombre_mundo}"):
-            if st.button(f"Sync World: {nombre_mundo}", key=f"m_{sid}"):
-                conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                for t in lista: run_task(t, drive_service, gc, cs)
-                cs.close(); conn.close(); add_log(f"Group {nombre_mundo} OK"); st.rerun()
-            
-            st.markdown("<br>", unsafe_allow_html=True)
-            cols = st.columns(4) # AJUSTE A 4 POR FILA
+        nombre_mundo = NOMBRES_MUNDOS.get(sid, sid[:8])
+        with st.expander(nombre_mundo):
+            # Grid de 4 columnas exactas por fila
+            cols = st.columns(4)
             for i, t in enumerate(lista):
                 with cols[i % 4]:
                     if st.button(t['tab'].replace('_', ' '), key=f"btn_{t['tab']}_{sid}"):
