@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS PROFESIONAL REFINADO (SIN VECTORES, SÓLO LUZ Y FORMA) ---
+# --- CSS APPLE MINIMALISTA V6 ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -37,60 +37,68 @@ st.markdown("""
         background-color: #000000 !important;
     }
 
+    /* Fondo base con degradado sutil */
     .stApp {
-        background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%);
+        background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%) !important;
     }
 
-    /* Títulos */
-    .app-header { text-align: center; padding: 40px 0 20px 0; }
+    /* TÍTULO LIMPIO (SIN RECUADRO) */
+    .app-header { 
+        text-align: center; 
+        padding: 60px 0 40px 0; 
+        background: transparent !important;
+    }
     .app-header h1 {
-        font-size: 3rem !important;
+        font-size: 3.5rem !important;
         font-weight: 600 !important;
-        letter-spacing: -1.5px !important;
-        color: #FFFFFF;
-        margin-bottom: 0px !important;
+        letter-spacing: -2px !important;
+        color: #FFFFFF !important;
+        margin: 0 !important;
+        background: none !important;
     }
     .app-header p {
         color: #29b5e8;
-        letter-spacing: 5px;
-        font-size: 0.85rem;
+        letter-spacing: 8px;
+        font-size: 0.8rem;
         text-transform: uppercase;
+        margin-top: 5px !important;
+        opacity: 0.8;
     }
 
-    /* BOTÓN MAESTRO: EJECUTAR MASIVO (AZUL SÓLIDO Y LIMPIO) */
+    /* BOTÓN MAESTRO: GHOST STYLE (MÁS PROFESIONAL) */
     div.stButton > button:first-child {
-        background: #29b5e8 !important;
-        color: white !important;
-        border-radius: 50px !important;
-        padding: 18px 60px !important;
-        font-weight: 600 !important;
-        font-size: 1.1rem !important;
+        background: transparent !important;
+        color: #29b5e8 !important;
+        border: 1px solid rgba(41, 181, 232, 0.5) !important;
+        border-radius: 100px !important;
+        padding: 12px 60px !important;
+        font-weight: 400 !important;
+        font-size: 0.9rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 2px !important;
-        border: none !important;
-        transition: all 0.4s ease !important;
-        margin: 20px auto !important;
+        letter-spacing: 3px !important;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        margin: 0 auto !important;
         display: block !important;
-        box-shadow: 0 10px 30px rgba(41, 181, 232, 0.2) !important;
     }
     
     div.stButton > button:first-child:hover {
-        transform: scale(1.03);
-        box-shadow: 0 15px 40px rgba(41, 181, 232, 0.4) !important;
-        background: #3ac0f2 !important;
+        background: rgba(41, 181, 232, 0.1) !important;
+        border-color: #29b5e8 !important;
+        color: white !important;
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(41, 181, 232, 0.15) !important;
     }
 
     /* BOTONES DE TAREA: RECTANGULARES 16:9 LIMPIOS */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.03) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        color: #e0e0e0 !important;
+        color: #d1d1d1 !important;
         border-radius: 12px !important;
-        /* Proporción 16:9 */
         height: 85px !important; 
-        width: 150px !important;
-        min-width: 150px !important;
-        max-width: 150px !important;
+        width: 155px !important;
+        min-width: 155px !important;
+        max-width: 155px !important;
         font-size: 0.75rem !important;
         font-weight: 400 !important;
         display: flex !important;
@@ -100,69 +108,57 @@ st.markdown("""
         padding: 10px !important;
         white-space: normal !important;
         word-wrap: break-word !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.3s ease !important;
         margin: 0 auto !important;
     }
     
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(41, 181, 232, 0.08) !important;
-        border-color: rgba(41, 181, 232, 0.6) !important;
+        background: rgba(41, 181, 232, 0.05) !important;
+        border-color: rgba(41, 181, 232, 0.4) !important;
         color: #ffffff !important;
-        transform: scale(1.05);
-        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+        transform: scale(1.04);
     }
 
-    /* CONSOLA GLASSMORPHISM */
+    /* CONSOLA */
     .console-card {
-        background: rgba(0, 0, 0, 0.4) !important;
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 20px;
-        padding: 20px;
+        background: rgba(0, 0, 0, 0.2) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 15px;
+        padding: 15px;
         font-family: 'JetBrains Mono', monospace;
         color: #29b5e8;
-        height: 160px;
+        height: 140px;
         overflow-y: auto;
-        margin-bottom: 30px;
-        font-size: 0.8rem;
+        margin: 40px auto;
+        max-width: 900px;
+        font-size: 0.75rem;
     }
 
-    /* EXPANDERS MUNDOS */
+    /* EXPANDERS */
     .stExpander {
         border: none !important;
-        background: rgba(255, 255, 255, 0.015) !important;
-        border-radius: 24px !important;
-        margin-bottom: 12px !important;
+        background: rgba(255, 255, 255, 0.01) !important;
+        border-radius: 20px !important;
+        margin-bottom: 8px !important;
     }
-    .stExpander summary { font-weight: 500 !important; color: white !important; font-size: 1.1rem !important; opacity: 0.9; }
+    .stExpander summary { font-weight: 400 !important; color: #888 !important; font-size: 1rem !important; }
+    .stExpander summary:hover { color: white !important; }
     
     /* BOTÓN SYNC ALL MUNDO */
     .mundo-sync-container button {
         background: transparent !important;
         color: #29b5e8 !important;
-        border: 1px solid rgba(41, 181, 232, 0.3) !important;
+        border: 1px solid rgba(41, 181, 232, 0.2) !important;
         border-radius: 30px !important;
-        font-size: 0.75rem !important;
-        padding: 2px 20px !important;
-        height: 35px !important;
-        width: auto !important;
-        min-width: 0 !important;
+        font-size: 0.7rem !important;
+        height: 32px !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# =========================================================
-# ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS)
-# =========================================================
-SF_PARAMS = {
-    'user': 'bryan.zuniga@rappi.com',
-    'account': 'hg51401',
-    'authenticator': 'snowflake',
-    'warehouse': 'RP_PERSONALUSER_WH',
-    'database': 'FIVETRAN',
-    'schema': 'PUBLIC',
-    'role': 'RP_READ_ACCESS_PU_ROLE'
-}
+# --- ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS) ---
+SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
 
 TAREAS = [
     {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
@@ -194,12 +190,9 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LÓGICA DE LOGS ---
-if 'logs' not in st.session_state:
-    st.session_state.logs = ["> SnowSync Enterprise ready."]
-
-def log(msg):
-    st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
+# --- LOGS ---
+if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online"]
+def log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
@@ -242,19 +235,19 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # NIVEL 1: BOTÓN MAESTRO (LIMPIO, SIN VECTOR)
+    # BOTÓN MAESTRO GHOST STYLE
     if st.button("EJECUTAR MASIVO"):
-        log("INITIALIZING MASSIVE EXECUTION...")
+        log("MASTER SYNC INITIATED...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            log(f"Sync: {t['tab']}")
+            log(f"Updated: {t['tab']}")
         cs.close(); conn.close()
         log("PIPELINE COMPLETE.")
         st.rerun()
 
-    # NIVEL 2: CONSOLA
-    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
+    # CONSOLA
+    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-6:])}</div>', unsafe_allow_html=True)
 
     # AGRUPACIÓN
     mundos = {}
@@ -263,37 +256,30 @@ try:
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # NIVEL 3: RENDERIZADO POR MUNDOS
+    # RENDERIZADO
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
-            
-            # Botón de Mundo Completo
             st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
-            if st.button(f"Sync All {nombre} Group", key=f"m_{sid}"):
-                log(f"Iniciando Mundo: {nombre}")
+            if st.button(f"Sync Group: {nombre}", key=f"m_{sid}"):
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                 for t in lista:
                     run_task(t, drive_service, gc, cs)
-                    log(f"OK: {t['tab']}")
                 cs.close(); conn.close()
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
-
+            
             st.markdown("<br>", unsafe_allow_html=True)
-
-            # Grid de Botones Individuales (RECTANGULARES 16:9 ESTÁNDAR)
+            
             cols = st.columns(8) 
             for i, t in enumerate(lista):
                 with cols[i % 8]:
                     clean_name = t['tab'].replace('_', ' ')
                     if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
-                        log(f"Iniciando: {t['tab']}")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
-                        log(f"Finalizado: {t['tab']}")
-                        st.toast(f"Updated {t['tab']}")
+                        st.toast(f"Success: {t['tab']}")
                         st.rerun()
 
 except Exception as e:
