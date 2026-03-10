@@ -19,119 +19,114 @@ st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide"
 # =========================================================
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Operaciones CH",
-    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Golden Dani",
-    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "SKUs Management",
-    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "AVL Engine",
-    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "Daily History",
-    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "Inventarios",
-    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Stock Bolsas"
+    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Golden Engine",
+    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "SKUs Inventory",
+    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "AVL Analytics",
+    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "Daily Records",
+    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "Master Stocks",
+    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE DESIGN SYSTEM V4 ---
+# --- CSS DEFINITIVO: APPLE INTERFACE DESIGN ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-    /* Variables de Diseño Apple */
-    :root {
-        --bg-color: #000000;
-        --sf-blue: #29b5e8;
-        --card-bg: rgba(28, 28, 30, 0.7);
-        --glass-border: rgba(255, 255, 255, 0.08);
-    }
-
-    html, body, [class*="css"] {
-        font-family: 'Poppins', sans-serif !important;
-        background-color: var(--bg-color) !important;
-    }
-
+    /* Fondo y Base */
     .stApp {
-        background: radial-gradient(circle at 2% 2%, #1a1a1a 0%, #000000 100%);
+        background-color: #000000 !important;
+        font-family: 'Poppins', sans-serif !important;
     }
 
-    /* TITULO */
-    h1 {
-        font-weight: 600 !important;
-        letter-spacing: -1.2px !important;
-        font-size: 2.8rem !important;
-        margin-bottom: 30px !important;
-        color: white;
+    /* Títulos Estilo Apple */
+    .main-title {
+        font-size: 48px;
+        font-weight: 600;
+        letter-spacing: -2px;
+        color: #FFFFFF;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+    .sub-title {
+        font-size: 18px;
+        color: #888888;
+        text-align: center;
+        margin-bottom: 50px;
     }
 
-    /* BOTÓN MAESTRO (MINIMALISTA) */
+    /* Botón Maestro: Minimalismo Puro */
     div.stButton > button:first-child {
-        background: white !important;
-        color: black !important;
-        border: none !important;
-        padding: 12px 40px !important;
-        border-radius: 30px !important;
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        border-radius: 40px !important;
+        padding: 15px 50px !important;
         font-weight: 500 !important;
-        font-size: 0.9rem !important;
-        margin: 0 auto !important;
+        font-size: 16px !important;
+        border: none !important;
         display: block !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+        margin: 0 auto 50px auto !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
     }
     div.stButton > button:first-child:hover {
         transform: scale(1.03);
-        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
     }
 
-    /* TARJETAS DE MUNDOS */
-    .mundo-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--glass-border);
-        border-radius: 24px;
-        padding: 25px;
-        margin-bottom: 25px;
-    }
-    .mundo-title {
-        color: #8E8E93;
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 20px;
-    }
-
-    /* BOTONES DE TAREA CUADRADOS E IGUALES */
+    /* Botones de Tarea: Tarjetas de Acción */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid var(--glass-border) !important;
-        color: white !important;
-        border-radius: 16px !important;
-        /* Proporciones fijas */
-        height: 100px !important;
-        width: 100px !important;
-        margin: 0 auto !important;
-        font-size: 0.7rem !important;
-        font-weight: 500 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        transition: all 0.2s ease !important;
+        background: rgba(28, 28, 30, 0.8) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #FFFFFF !important;
+        border-radius: 22px !important;
+        height: 120px !important;
+        width: 100% !important;
+        font-size: 14px !important;
+        font-weight: 400 !important;
+        margin-bottom: 20px !important;
+        transition: all 0.4s ease !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-color: var(--sf-blue) !important;
+        background: #1c1c1e !important;
+        border-color: #29b5e8 !important;
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.4);
     }
 
-    /* TERMINAL STATUS BAR */
-    .status-bar {
-        background: rgba(41, 181, 232, 0.05);
-        border: 1px solid rgba(41, 181, 232, 0.2);
-        padding: 10px 20px;
-        border-radius: 12px;
+    /* Contenedor de Mundo (Cards de Grupo) */
+    .mundo-section {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 30px;
+        padding: 35px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .mundo-header {
+        font-size: 20px;
+        font-weight: 500;
+        color: #FFFFFF;
+        margin-bottom: 25px;
+        padding-left: 10px;
+        border-left: 3px solid #29b5e8;
+    }
+
+    /* Status Bar Minimalista */
+    .status-pill {
+        background: rgba(41, 181, 232, 0.1);
+        color: #29b5e8;
+        padding: 8px 20px;
+        border-radius: 20px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.8rem;
-        color: var(--sf-blue);
-        margin: 20px 0;
+        font-size: 12px;
+        width: fit-content;
+        margin: 20px auto;
+        border: 1px solid rgba(41, 181, 232, 0.2);
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- TAREAS (ESTRUCTURA ORIGINAL) ---
+# --- ESTRUCTURA DE DATOS (RESTAURADA ORIGINAL) ---
 SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
 
 TAREAS = [
@@ -165,10 +160,10 @@ TAREAS = [
 ]
 
 # --- LÓGICA DE ESTADO ---
-if 'status' not in st.session_state:
-    st.session_state.status = "System Ready"
+if 'last_action' not in st.session_state:
+    st.session_state.last_action = "System Ready"
 
-# --- FUNCIONES CORE ---
+# --- CORE FUNCTIONS (REUTILIZADAS) ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
@@ -188,7 +183,7 @@ def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False, "SQL_MISSING"
+        if not query: return False
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
         try: wks = sh.worksheet(t["tab"])
@@ -196,11 +191,12 @@ def run_task(t, drive_service, gc, cs):
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True, "SUCCESS"
-    except Exception as e: return False, str(e)
+        return True
+    except: return False
 
 # --- UI START ---
-st.markdown("<h1>System <span style='color:#555;'>Console</span></h1>", unsafe_allow_html=True)
+st.markdown("<div class='main-title'>Data Sync Pro</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-title'>Enterprise Snowflake Synchronization Hub</div>", unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -209,20 +205,18 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE ESTADO MINIMALISTA
-    st.markdown(f'<div class="status-bar">● {st.session_state.status}</div>', unsafe_allow_html=True)
+    # BARRA DE ESTADO (PILL STYLE)
+    st.markdown(f'<div class="status-pill">STATUS: {st.session_state.last_action}</div>', unsafe_allow_html=True)
 
-    # BOTÓN CENTRAL
-    if st.button("Initialize Master Sync"):
-        st.session_state.status = "Executing Global Sync..."
+    # BOTÓN MAESTRO (CLEAN WHITE)
+    if st.button("Initialize Full Pipeline"):
+        st.session_state.last_action = "Broadcasting..."
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
-            ok, msg = run_task(t, drive_service, gc, cs)
+            run_task(t, drive_service, gc, cs)
         cs.close(); conn.close()
-        st.session_state.status = "Pipeline Complete"
+        st.session_state.last_action = "System Updated Successfully"
         st.rerun()
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
 
     # AGRUPACIÓN POR MUNDOS
     mundos = {}
@@ -233,25 +227,27 @@ try:
 
     # RENDERIZADO ESTILO APPLE CARDS
     for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, sid[:10])
+        nombre = NOMBRES_MUNDOS.get(sid, "Dataset " + sid[:6])
         
-        # Inyectamos el contenedor del mundo
-        st.markdown(f'<div class="mundo-card"><div class="mundo-title">{nombre}</div>', unsafe_allow_html=True)
+        # Inicio de la Sección del Mundo
+        st.markdown(f'<div class="mundo-section"><div class="mundo-header">{nombre}</div>', unsafe_allow_html=True)
         
-        # Grid de botones cuadrados
-        cols = st.columns(10) # 10 columnas para que sean pequeños y uniformes
+        # Grid de botones cuadrados (Mallas de 6 columnas)
+        cols = st.columns(6)
         for i, t in enumerate(lista):
-            with cols[i % 10]:
-                if st.button(t['tab'][:8], key=f"btn_{t['tab']}_{sid}"):
-                    st.session_state.status = f"Syncing {t['tab']}..."
+            with cols[i % 6]:
+                # Nombre corto para el botón
+                btn_label = t['tab'].replace('_', ' ')
+                if st.button(f"⚡\n{btn_label}", key=f"b_{t['tab']}"):
+                    st.session_state.last_action = f"Syncing {t['tab']}..."
                     conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                    run_task(t, drive_service, gc, cs)
+                    if run_task(t, drive_service, gc, cs):
+                        st.toast(f"{t['tab']} Done")
+                        st.session_state.last_action = "Idle"
                     cs.close(); conn.close()
-                    st.session_state.status = "Idle"
-                    st.toast(f"Updated {t['tab']}")
                     st.rerun()
         
         st.markdown('</div>', unsafe_allow_html=True)
 
 except Exception as e:
-    st.error(f"Booting sequence failed: {e}")
+    st.error(f"Booting failed: {e}")
