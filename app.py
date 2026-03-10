@@ -12,153 +12,98 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 # --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
+st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide")
 
 # =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS
+# 1. AQUÍ CAMBIAS LOS NOMBRES DE TUS MUNDOS (SHEETS)
 # =========================================================
 NOMBRES_MUNDOS = {
-    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Operaciones CH",
-    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Golden Engine",
-    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "SKUs Inventory",
-    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "AVL Analytics",
-    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "Daily Records",
-    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "Master Stocks",
-    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
+    "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Mundo 1 - Operaciones CH",
+    "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Mundo 2 - Golden Dani",
+    "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0": "Mundo 3 - SKU Management",
+    "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "Mundo 4 - AVL Dani",
+    "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "Mundo 5 - Histórico Diario",
+    "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "Mundo 6 - Inventarios Dos Dueños",
+    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Mundo 7 - Stock Bolsas"
 }
 
-# --- CSS APPLE MINIMALISTA V6 ---
+# --- DISEÑO HACKER / SNOWFLAKE (CSS) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
 
     html, body, [class*="css"], .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
-        background-color: #000000 !important;
     }
 
-    /* Fondo base con degradado sutil */
-    .stApp {
-        background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%) !important;
-    }
+    .main { background-color: #0e1117; }
 
-    /* TÍTULO LIMPIO (SIN RECUADRO) */
-    .app-header { 
-        text-align: center; 
-        padding: 60px 0 40px 0; 
-        background: transparent !important;
-    }
-    .app-header h1 {
-        font-size: 3.5rem !important;
-        font-weight: 600 !important;
-        letter-spacing: -2px !important;
-        color: #FFFFFF !important;
-        margin: 0 !important;
-        background: none !important;
-    }
-    .app-header p {
-        color: #29b5e8;
-        letter-spacing: 8px;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        margin-top: 5px !important;
-        opacity: 0.8;
-    }
-
-    /* BOTÓN MAESTRO: GHOST STYLE (MÁS PROFESIONAL) */
+    /* BOTÓN MAESTRO AZUL */
     div.stButton > button:first-child {
-        background: transparent !important;
-        color: #29b5e8 !important;
-        border: 1px solid rgba(41, 181, 232, 0.5) !important;
-        border-radius: 100px !important;
-        padding: 12px 60px !important;
-        font-weight: 400 !important;
-        font-size: 0.9rem !important;
-        text-transform: uppercase !important;
-        letter-spacing: 3px !important;
-        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-        margin: 0 auto !important;
-        display: block !important;
-    }
-    
-    div.stButton > button:first-child:hover {
-        background: rgba(41, 181, 232, 0.1) !important;
-        border-color: #29b5e8 !important;
+        background-color: #29b5e8 !important;
         color: white !important;
-        transform: scale(1.02);
-        box-shadow: 0 0 25px rgba(41, 181, 232, 0.15) !important;
+        border: none !important;
+        font-weight: 600 !important;
+        padding: 1rem !important;
+        border-radius: 12px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
     }
 
-    /* BOTONES DE TAREA: RECTANGULARES 16:9 LIMPIOS */
-    [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        color: #d1d1d1 !important;
-        border-radius: 12px !important;
-        height: 85px !important; 
-        width: 155px !important;
-        min-width: 155px !important;
-        max-width: 155px !important;
-        font-size: 0.75rem !important;
-        font-weight: 400 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-        padding: 10px !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
+    /* BOTONES CUADRADOS DE TAREAS */
+    div.stButton > button {
+        background-color: #1e2229 !important;
+        color: #29b5e8 !important;
+        border: 2px solid #29b5e8 !important;
+        border-radius: 15px !important;
+        aspect-ratio: 1 / 1 !important; /* Forza la forma cuadrada */
+        width: 100% !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
         transition: all 0.3s ease !important;
-        margin: 0 auto !important;
+        margin-bottom: 10px;
     }
     
-    [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(41, 181, 232, 0.05) !important;
-        border-color: rgba(41, 181, 232, 0.4) !important;
-        color: #ffffff !important;
-        transform: scale(1.04);
+    div.stButton > button:hover {
+        background-color: #29b5e8 !important;
+        color: white !important;
+        transform: scale(1.05) !important;
     }
 
-    /* CONSOLA */
-    .console-card {
-        background: rgba(0, 0, 0, 0.2) !important;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        border-radius: 15px;
-        padding: 15px;
-        font-family: 'JetBrains Mono', monospace;
-        color: #29b5e8;
-        height: 140px;
+    /* CONSOLA TIPO TERMINAL */
+    .terminal-box {
+        background-color: #000000;
+        color: #00FF41; /* Verde Matrix */
+        font-family: 'JetBrains Mono', monospace !important;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #333;
+        height: 300px;
         overflow-y: auto;
-        margin: 40px auto;
-        max-width: 900px;
-        font-size: 0.75rem;
+        font-size: 13px;
+        line-height: 1.5;
+        box-shadow: inset 0 0 10px #00FF41;
     }
 
     /* EXPANDERS */
     .stExpander {
-        border: none !important;
-        background: rgba(255, 255, 255, 0.01) !important;
-        border-radius: 20px !important;
-        margin-bottom: 8px !important;
-    }
-    .stExpander summary { font-weight: 400 !important; color: #888 !important; font-size: 1rem !important; }
-    .stExpander summary:hover { color: white !important; }
-    
-    /* BOTÓN SYNC ALL MUNDO */
-    .mundo-sync-container button {
-        background: transparent !important;
-        color: #29b5e8 !important;
-        border: 1px solid rgba(41, 181, 232, 0.2) !important;
-        border-radius: 30px !important;
-        font-size: 0.7rem !important;
-        height: 32px !important;
+        border: 1px solid #29b5e8 !important;
+        border-radius: 12px !important;
+        background-color: #161b22 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS) ---
-SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
+# --- ESTRUCTURA DE DATOS (ORIGINAL) ---
+SF_PARAMS = {
+    'user': 'bryan.zuniga@rappi.com',
+    'account': 'hg51401',
+    'authenticator': 'snowflake',
+    'warehouse': 'RP_PERSONALUSER_WH',
+    'database': 'FIVETRAN',
+    'schema': 'PUBLIC',
+    'role': 'RP_READ_ACCESS_PU_ROLE'
+}
 
 TAREAS = [
     {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
@@ -190,15 +135,19 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LOGS ---
-if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online"]
-def log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
+# --- INICIALIZAR HISTORIAL DE TERMINAL ---
+if 'logs' not in st.session_state:
+    st.session_state.logs = ["> System initialized...", "> Waiting for commands..."]
 
-# --- CORE FUNCTIONS ---
+def add_log(text):
+    timestamp = time.strftime("%H:%M:%S")
+    st.session_state.logs.append(f"[{timestamp}] {text}")
+
+# --- FUNCIONES CORE ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
-        results = drive_service.files().list(q=query, fields='files(id, name)').execute()
+        results = drive_service.files().list(q=query, spaces='drive', corpora='allDrives', includeItemsFromAllDrives=True, supportsAllDrives=True, fields='files(id, name)').execute()
         items = results.get('files', [])
         if not items: return None
         file_id = items[0]['id']
@@ -206,81 +155,103 @@ def get_sql_content(drive_service, file_name):
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
         done = False
-        while not done: _, done = downloader.next_chunk()
+        while done is False: _, done = downloader.next_chunk()
         return fh.getvalue().decode('utf-8')
-    except: return None
+    except Exception as e:
+        return None
 
 def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False
+        if not query: return False, "SQL NOT FOUND"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
-        try: wks = sh.worksheet(t["tab"])
-        except: wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
+        try:
+            wks = sh.worksheet(t["tab"])
+        except gspread.exceptions.WorksheetNotFound:
+            wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True
-    except: return False
+        return True, f"SUCCESS: {t['tab']}"
+    except Exception as e:
+        return False, str(e)
 
-# --- UI START ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1><p>Enterprise Edition</p></div>', unsafe_allow_html=True)
+# --- APP START ---
+st.title("❄️ DATA SYNC PRO: COMMAND CENTER")
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
-    google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
-    creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
-    drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
+    encoded_json = st.secrets["GOOGLE_BASE64"].strip()
+    decoded_bytes = base64.b64decode(encoded_json)
+    google_info = json.loads(decoded_bytes.decode('utf-8'))
+    
+    scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
+    creds = Credentials.from_service_account_info(google_info, scopes=scopes)
+    drive_service = build('drive', 'v3', credentials=creds)
+    gc = gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BOTÓN MAESTRO GHOST STYLE
-    if st.button("EJECUTAR MASIVO"):
-        log("MASTER SYNC INITIATED...")
-        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+    # --- BOTÓN MAESTRO ---
+    if st.button("EXECUTE ALL PROTOCOLS (MASTER SYNC)"):
+        add_log("ALERT: MASTER PIPELINE INITIATED")
+        conn = snowflake.connector.connect(**SF_PARAMS)
+        cs = conn.cursor()
         for t in TAREAS:
-            run_task(t, drive_service, gc, cs)
-            log(f"Updated: {t['tab']}")
-        cs.close(); conn.close()
-        log("PIPELINE COMPLETE.")
-        st.rerun()
+            add_log(f"RUNNING: {t['tab']}...")
+            success, msg = run_task(t, drive_service, gc, cs)
+            if success: add_log(f"OK: {t['tab']} sync completed.")
+            else: add_log(f"CRITICAL ERROR IN {t['tab']}: {msg}")
+        cs.close()
+        conn.close()
+        add_log("SYSTEM: ALL TASKS FINISHED")
 
-    # CONSOLA
-    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-6:])}</div>', unsafe_allow_html=True)
+    # --- TERMINAL BOX (HACKER STYLE) ---
+    st.markdown(f'''
+        <div class="terminal-box">
+            {"<br>".join(st.session_state.logs[-15:])}
+        </div>
+    ''', unsafe_allow_html=True)
 
-    # AGRUPACIÓN
+    st.markdown("---")
+
+    # --- AGRUPACIÓN POR MUNDOS ---
     mundos = {}
     for tarea in TAREAS:
-        sid = tarea["sheet"]
-        if sid not in mundos: mundos[sid] = []
-        mundos[sid].append(tarea)
+        s_id = tarea["sheet"]
+        if s_id not in mundos: mundos[s_id] = []
+        mundos[s_id].append(tarea)
 
-    # RENDERIZADO
-    for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
-        with st.expander(f"{nombre}"):
-            st.markdown('<div class="mundo-sync-container">', unsafe_allow_html=True)
-            if st.button(f"Sync Group: {nombre}", key=f"m_{sid}"):
-                conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                for t in lista:
-                    run_task(t, drive_service, gc, cs)
-                cs.close(); conn.close()
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            st.markdown("<br>", unsafe_allow_html=True)
-            
-            cols = st.columns(8) 
-            for i, t in enumerate(lista):
-                with cols[i % 8]:
-                    clean_name = t['tab'].replace('_', ' ')
-                    if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
-                        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                        run_task(t, drive_service, gc, cs)
-                        cs.close(); conn.close()
-                        st.toast(f"Success: {t['tab']}")
-                        st.rerun()
+    # --- RENDERIZADO DE MUNDOS ---
+    for s_id, lista in mundos.items():
+        # Busca el nombre personalizado o usa el ID por defecto
+        nombre_mundo = NOMBRES_MUNDOS.get(s_id, f"Mundo ID: {s_id[:10]}...")
+        
+        with st.expander(f"📁 {nombre_mundo}"):
+            # Cuadrícula de botones cuadrados (6 columnas para que se vean compactos)
+            cols = st.columns(6) 
+            for j, t in enumerate(lista):
+                with cols[j % 6]:
+                    if st.button(t['tab'], key=f"square_{t['tab']}_{s_id}"):
+                        add_log(f"MANUAL OVERRIDE: {t['tab']}")
+                        with st.spinner("Executing..."):
+                            conn = snowflake.connector.connect(**SF_PARAMS)
+                            cs = conn.cursor()
+                            success, msg = run_task(t, drive_service, gc, cs)
+                            cs.close()
+                            conn.close()
+                            if success: 
+                                add_log(f"SYNC SUCCESS: {t['tab']}")
+                                st.toast("Success!")
+                            else: 
+                                add_log(f"ERROR: {msg}")
+                                st.error("Failed")
 
 except Exception as e:
-    st.error(f"Initialization Error: {e}")
+    st.error(f"FATAL BOOT ERROR: {e}")
+
+# Botón para limpiar terminal
+if st.sidebar.button("Clear Terminal Logs"):
+    st.session_state.logs = ["> Logs cleared..."]
+    st.rerun()
