@@ -73,7 +73,7 @@ st.markdown("""
         font-size: 0.8rem;
         text-transform: uppercase;
         margin-top: 5px !important;
-        opacity: 0.1;
+        opacity: 0.8;
     }
 
     /* BOTÓN GHOST EJECUTAR MASIVO */
