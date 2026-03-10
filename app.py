@@ -27,12 +27,12 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS DEFINITIVO (APPLE DESIGN + TEXT FIX) ---
+# --- CSS APPLE ULTIMATE (ESTABILIDAD GARANTIZADA) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
 
-    html, body, [class*="css"] {
+    html, body, [class*="css"], .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
         background-color: #000000 !important;
     }
@@ -51,13 +51,13 @@ st.markdown("""
     .app-header h1 { font-size: 3.2rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 8px; font-size: 0.8rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BOTÓN MAESTRO: GRANDE IZQUIERDA */
+    /* BOTÓN MAESTRO: IZQUIERDA */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
         border: none !important;
         border-radius: 12px !important;
-        padding: 15px 45px !important;
+        padding: 15px 40px !important;
         font-size: 1rem !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
@@ -68,7 +68,7 @@ st.markdown("""
         display: block !important;
     }
 
-    /* BOTÓN LIMPIAR: PEQUEÑO DERECHA */
+    /* BOTÓN LIMPIAR: DERECHA */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -76,16 +76,15 @@ st.markdown("""
         border-radius: 8px !important;
         padding: 4px 15px !important;
         font-size: 0.65rem !important;
-        text-transform: uppercase !important;
         float: right !important;
     }
 
-    /* BOTONES DE TAREA: RECTANGULARES 16:9 ESTABLES */
+    /* BOTONES TAREA: 16:9 RECTANGULAR */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         color: #ffffff !important;
-        border-radius: 12px !important;
+        border-radius: 14px !important;
         height: 75px !important;
         width: 100% !important;
         font-size: 0.75rem !important;
@@ -93,18 +92,13 @@ st.markdown("""
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        white-space: normal !important; /* Fix texto vertical */
-        word-wrap: break-word !important; /* Fix texto vertical */
+        white-space: normal !important;
+        word-wrap: break-word !important;
         line-height: 1.2 !important;
         transition: all 0.3s ease !important;
     }
-    [data-testid="stColumn"] div.stButton > button:hover {
-        border-color: #29b5e8 !important;
-        background: rgba(41, 181, 232, 0.05) !important;
-        transform: translateY(-2px);
-    }
 
-    /* CONSOLA MATRIX AZUL */
+    /* CONSOLA AZUL */
     .terminal-window {
         background-color: #050505;
         color: #29b5e8;
@@ -114,16 +108,14 @@ st.markdown("""
         border-radius: 12px;
         height: 250px;
         overflow-y: auto;
-        margin: 10px auto 40px auto;
-        max-width: 100%;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        margin-top: 10px;
     }
     .log-line { line-height: 1.6; font-size: 13px; margin: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.01); }
     </style>
     """, unsafe_allow_html=True)
 
 # =========================================================
-# ESTRUCTURA DE DATOS ORIGINAL (INTACTA)
+# ESTRUCTURA DE DATOS ORIGINAL (INTACTA - NO SE TOCA)
 # =========================================================
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
@@ -381,11 +373,11 @@ TAREAS = [
     }
 ]
 
-# --- LOGS ---
+# --- LÓGICA DE LOGS ---
 if 'logs' not in st.session_state: st.session_state.logs = ["› SnowSync Kernel Online."]
 def add_log(msg): st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
-# --- CORE FUNCTIONS ---
+# --- CORE FUNCTIONS (ESTABILIZADAS) ---
 def get_sql_content(drive_service, file_name):
     query = f"name='{file_name}' and trashed=false"
     results = drive_service.files().list(q=query, fields='files(id, name)').execute()
@@ -397,38 +389,19 @@ def get_sql_content(drive_service, file_name):
     while not done: _, done = downloader.next_chunk()
     return fh.getvalue().decode('utf-8')
 
-def run_task(t, drive_service, gc, cs, placeholder):
+def run_task(t, drive_service, gc, cs):
     try:
-        add_log(f"Fetching SQL: {t['sql']}")
-        placeholder.markdown(render_terminal(), unsafe_allow_html=True)
-        
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
         if not query: return False
-        
-        add_log(f"Executing Snowflake query...")
-        placeholder.markdown(render_terminal(), unsafe_allow_html=True)
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
-        
-        add_log(f"Updating Sheets ({len(df)} rows)...")
-        placeholder.markdown(render_terminal(), unsafe_allow_html=True)
         try: wks = sh.worksheet(t["tab"])
         except: wks = sh.add_worksheet(title=t["tab"], rows=1000, cols=20)
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        
-        add_log(f"SUCCESS: {t['tab']}")
-        placeholder.markdown(render_terminal(), unsafe_allow_html=True)
         return True
-    except Exception as e:
-        add_log(f"ERROR: {str(e)[:50]}")
-        placeholder.markdown(render_terminal(), unsafe_allow_html=True)
-        return False
-
-def render_terminal():
-    content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-10:]])
-    return f'<div class="terminal-window">{content}</div>'
+    except: return False
 
 # --- UI START ---
 st.markdown('<div class="app-header"><div class="big-snowflake">❄️</div><div class="title-text-group"><h1>SnowSync</h1><p>Enterprise Edition</p></div></div>', unsafe_allow_html=True)
@@ -440,28 +413,24 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE COMANDO
+    # COMANDOS
     col_l, col_r = st.columns([3, 1])
     with col_l:
-        execute_masivo = st.button("EJECUTAR MASIVO", key="masivo_btn")
+        if st.button("EJECUTAR MASIVO", key="masivo_btn"):
+            conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+            for t in TAREAS:
+                add_log(f"Syncing: {t['tab']}")
+                run_task(t, drive_service, gc, cs)
+            cs.close(); conn.close(); st.rerun()
     with col_r:
         if st.button("Clear Console", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
 
-    # CONSOLA DINÁMICA
-    console_placeholder = st.empty()
-    console_placeholder.markdown(render_terminal(), unsafe_allow_html=True)
+    # CONSOLA (SIMPLE Y ESTABLE)
+    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-10:]])
+    st.markdown(f'<div class="terminal-window">{log_content}</div>', unsafe_allow_html=True)
 
-    # LÓGICA MASIVA
-    if execute_masivo:
-        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-        for t in TAREAS:
-            run_task(t, drive_service, gc, cs, console_placeholder)
-        cs.close(); conn.close()
-        add_log("--- GLOBAL SYNC COMPLETE ---")
-        console_placeholder.markdown(render_terminal(), unsafe_allow_html=True)
-
-    # AGRUPACIÓN
+    # MUNDOS
     mundos = {}
     for tarea in TAREAS:
         sid = tarea["sheet"]
@@ -473,9 +442,10 @@ try:
         with st.expander(f"{nombre}"):
             if st.button(f"Sync World: {nombre}", key=f"m_{sid}"):
                 conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                for t in lista: run_task(t, drive_service, gc, cs, console_placeholder)
-                cs.close(); conn.close()
-                st.rerun()
+                for t in lista:
+                    add_log(f"Processing: {t['tab']}")
+                    run_task(t, drive_service, gc, cs)
+                cs.close(); conn.close(); st.rerun()
             
             st.markdown("<br>", unsafe_allow_html=True)
             cols = st.columns(6) 
@@ -483,9 +453,8 @@ try:
                 with cols[i % 6]:
                     if st.button(t['tab'].replace('_', ' '), key=f"btn_{t['tab']}_{sid}"):
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                        run_task(t, drive_service, gc, cs, console_placeholder)
-                        cs.close(); conn.close()
-                        st.rerun()
+                        run_task(t, drive_service, gc, cs)
+                        cs.close(); conn.close(); st.rerun()
 
 except Exception as e:
     st.error(f"Error: {e}")
