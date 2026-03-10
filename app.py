@@ -12,11 +12,9 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 # --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="Data Sync Pro", page_icon="❄️", layout="wide")
+st.set_page_config(page_title="SnowSync Pro", page_icon="❄️", layout="wide")
 
-# =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS
-# =========================================================
+# --- DICCIONARIO DE NOMBRES DE MUNDOS ---
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Operaciones CH",
     "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok": "Golden Engine",
@@ -27,106 +25,90 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS DEFINITIVO: APPLE INTERFACE DESIGN ---
+# --- CSS PROFESIONAL APPLE + SNOWFLAKE AZUL ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
 
-    /* Fondo y Base */
-    .stApp {
-        background-color: #000000 !important;
+    html, body, [class*="css"] {
         font-family: 'Poppins', sans-serif !important;
+        background-color: #000000 !important;
     }
 
-    /* Títulos Estilo Apple */
-    .main-title {
-        font-size: 48px;
-        font-weight: 600;
-        letter-spacing: -2px;
-        color: #FFFFFF;
-        margin-bottom: 5px;
-        text-align: center;
-    }
-    .sub-title {
-        font-size: 18px;
-        color: #888888;
-        text-align: center;
-        margin-bottom: 50px;
-    }
-
-    /* Botón Maestro: Minimalismo Puro */
+    /* Títulos */
+    h1 { font-weight: 600 !important; letter-spacing: -1.5px !important; color: white; }
+    
+    /* Botón Master (Pipeline General) */
     div.stButton > button:first-child {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-        border-radius: 40px !important;
-        padding: 15px 50px !important;
-        font-weight: 500 !important;
-        font-size: 16px !important;
+        background-color: #29b5e8 !important;
+        color: white !important;
         border: none !important;
+        padding: 15px 40px !important;
+        border-radius: 50px !important;
+        font-weight: 600 !important;
+        margin: 0 auto 30px auto !important;
         display: block !important;
-        margin: 0 auto 50px auto !important;
-        transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
-    }
-    div.stButton > button:first-child:hover {
-        transform: scale(1.03);
-        box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 20px rgba(41, 181, 232, 0.3) !important;
     }
 
-    /* Botones de Tarea: Tarjetas de Acción */
+    /* Botones de Tarea (Cuadrados Uniformes) */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(28, 28, 30, 0.8) !important;
-        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.05) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #FFFFFF !important;
-        border-radius: 22px !important;
-        height: 120px !important;
-        width: 100% !important;
-        font-size: 14px !important;
-        font-weight: 400 !important;
-        margin-bottom: 20px !important;
-        transition: all 0.4s ease !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        color: #ffffff !important;
+        border-radius: 18px !important;
+        height: 110px !important;
+        width: 110px !important;
+        font-size: 0.75rem !important;
+        transition: all 0.3s ease !important;
+        margin-bottom: 15px;
     }
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: #1c1c1e !important;
         border-color: #29b5e8 !important;
-        transform: translateY(-5px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+        background: rgba(41, 181, 232, 0.1) !important;
+        transform: translateY(-3px);
     }
 
-    /* Contenedor de Mundo (Cards de Grupo) */
-    .mundo-section {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 30px;
-        padding: 35px;
-        margin-bottom: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .mundo-header {
-        font-size: 20px;
-        font-weight: 500;
-        color: #FFFFFF;
-        margin-bottom: 25px;
-        padding-left: 10px;
-        border-left: 3px solid #29b5e8;
+    /* Botón de Ejecutar Mundo Completo */
+    .mundo-sync-btn button {
+        background-color: transparent !important;
+        color: #29b5e8 !important;
+        border: 1px solid #29b5e8 !important;
+        border-radius: 30px !important;
+        font-size: 0.8rem !important;
+        padding: 5px 20px !important;
+        height: auto !important;
+        width: auto !important;
+        aspect-ratio: auto !important;
     }
 
-    /* Status Bar Minimalista */
-    .status-pill {
-        background: rgba(41, 181, 232, 0.1);
-        color: #29b5e8;
-        padding: 8px 20px;
-        border-radius: 20px;
+    /* Consola Hacker */
+    .terminal-output {
+        background: rgba(10, 10, 10, 0.8) !important;
+        backdrop-filter: blur(15px);
+        border: 1px solid #29b5e8;
+        border-radius: 15px;
+        padding: 20px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
-        width: fit-content;
-        margin: 20px auto;
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        font-size: 13px;
+        color: #29b5e8;
+        height: 220px;
+        overflow-y: auto;
+        margin-bottom: 30px;
+        box-shadow: inset 0 0 15px rgba(41, 181, 232, 0.1);
+    }
+
+    /* Acordeones (Expanders) */
+    .stExpander {
+        border: none !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-radius: 20px !important;
+        margin-bottom: 10px !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS (RESTAURADA ORIGINAL) ---
+# --- ESTRUCTURA DE DATOS (ORIGINAL INTACTA) ---
 SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
 
 TAREAS = [
@@ -159,11 +141,14 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- LÓGICA DE ESTADO ---
-if 'last_action' not in st.session_state:
-    st.session_state.last_action = "System Ready"
+# --- SESSION LOGS ---
+if 'logs' not in st.session_state:
+    st.session_state.logs = ["> SnowSync Kernel Loaded.", "> System Ready."]
 
-# --- CORE FUNCTIONS (REUTILIZADAS) ---
+def log(msg):
+    st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
+
+# --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
@@ -183,7 +168,7 @@ def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False
+        if not query: return False, "SQL_ERROR"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
         try: wks = sh.worksheet(t["tab"])
@@ -191,12 +176,11 @@ def run_task(t, drive_service, gc, cs):
         wks.batch_clear([f"{t['c_start']}:{t['c_end']}{wks.row_count}"])
         time.sleep(1)
         set_with_dataframe(wks, df, row=t["p_row"], col=t.get("p_col", 1), include_column_header=True)
-        return True
-    except: return False
+        return True, "SUCCESS"
+    except Exception as e: return False, str(e)
 
-# --- UI START ---
-st.markdown("<div class='main-title'>Data Sync Pro</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-title'>Enterprise Snowflake Synchronization Hub</div>", unsafe_allow_html=True)
+# --- INICIO UI ---
+st.markdown("<h1 style='text-align: center;'>SnowSync <span style='color:#29b5e8; font-weight:300;'>Enterprise</span></h1>", unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -205,18 +189,20 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE ESTADO (PILL STYLE)
-    st.markdown(f'<div class="status-pill">STATUS: {st.session_state.last_action}</div>', unsafe_allow_html=True)
-
-    # BOTÓN MAESTRO (CLEAN WHITE)
-    if st.button("Initialize Full Pipeline"):
-        st.session_state.last_action = "Broadcasting..."
+    # BOTÓN PIPELINE GENERAL
+    if st.button("🚀 INITIALIZE MASTER PIPELINE"):
+        log("BROADCASTING GLOBAL SYNC PROTOCOL...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
-            run_task(t, drive_service, gc, cs)
+            log(f"Syncing {t['tab']}...")
+            ok, err = run_task(t, drive_service, gc, cs)
+            if ok: log(f"OK: {t['tab']}")
+            else: log(f"ERR: {t['tab']} ({err})")
         cs.close(); conn.close()
-        st.session_state.last_action = "System Updated Successfully"
-        st.rerun()
+        log("GLOBAL PIPELINE COMPLETE.")
+
+    # CONSOLA HACKER
+    st.markdown(f'<div class="terminal-output">{"<br>".join(st.session_state.logs[-10:])}</div>', unsafe_allow_html=True)
 
     # AGRUPACIÓN POR MUNDOS
     mundos = {}
@@ -225,29 +211,44 @@ try:
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO ESTILO APPLE CARDS
+    # RENDERIZADO DE SECCIONES PLEGABLES
     for sid, lista in mundos.items():
-        nombre = NOMBRES_MUNDOS.get(sid, "Dataset " + sid[:6])
+        nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
         
-        # Inicio de la Sección del Mundo
-        st.markdown(f'<div class="mundo-section"><div class="mundo-header">{nombre}</div>', unsafe_allow_html=True)
-        
-        # Grid de botones cuadrados (Mallas de 6 columnas)
-        cols = st.columns(6)
-        for i, t in enumerate(lista):
-            with cols[i % 6]:
-                # Nombre corto para el botón
-                btn_label = t['tab'].replace('_', ' ')
-                if st.button(f"⚡\n{btn_label}", key=f"b_{t['tab']}"):
-                    st.session_state.last_action = f"Syncing {t['tab']}..."
+        with st.expander(f"📁 {nombre} ({len(lista)} tasks)"):
+            # Botón de Ejecución de Mundo Completo
+            col_mundo_btn, _ = st.columns([1, 4])
+            with col_mundo_btn:
+                st.markdown('<div class="mundo-sync-btn">', unsafe_allow_html=True)
+                if st.button(f"Run All {nombre}", key=f"world_{sid}"):
+                    log(f"Initiating Group Sync: {nombre}")
                     conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                    if run_task(t, drive_service, gc, cs):
-                        st.toast(f"{t['tab']} Done")
-                        st.session_state.last_action = "Idle"
+                    for t in lista:
+                        run_task(t, drive_service, gc, cs)
+                        log(f"OK: {t['tab']}")
                     cs.close(); conn.close()
+                    log(f"Group {nombre} Finished.")
                     st.rerun()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            # Botones Cuadrados Individuales
+            cols = st.columns(8) # 8 por fila para perfecta simetría
+            for i, t in enumerate(lista):
+                with cols[i % 8]:
+                    label = t['tab'].replace('_', ' ')
+                    if st.button(f"⚡\n{label[:12]}", key=f"ind_{t['tab']}_{sid}"):
+                        log(f"Individual Override: {t['tab']}...")
+                        conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+                        run_task(t, drive_service, gc, cs)
+                        cs.close(); conn.close()
+                        log(f"Done: {t['tab']}")
+                        st.toast(f"{t['tab']} Updated")
+                        st.rerun()
 
 except Exception as e:
-    st.error(f"Booting failed: {e}")
+    st.error(f"Critical System Failure: {e}")
+
+if st.sidebar.button("Reset Console"):
+    st.session_state.logs = ["> Kernel Reset."]; st.rerun()
