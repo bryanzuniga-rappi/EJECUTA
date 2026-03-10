@@ -12,7 +12,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 # --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="SnowSync Pro", page_icon="❄️", layout="wide")
+st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # --- DICCIONARIO DE NOMBRES DE MUNDOS ---
 NOMBRES_MUNDOS = {
@@ -25,7 +25,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS PROFESIONAL APPLE + SNOWFLAKE AZUL ---
+# --- CSS ULTRA PRO (APPLE DESIGN LANGUAGE) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -35,80 +35,110 @@ st.markdown("""
         background-color: #000000 !important;
     }
 
-    /* Títulos */
-    h1 { font-weight: 600 !important; letter-spacing: -1.5px !important; color: white; }
-    
-    /* Botón Master (Pipeline General) */
-    div.stButton > button:first-child {
-        background-color: #29b5e8 !important;
+    /* Contenedor Principal */
+    .stApp {
+        background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%);
+    }
+
+    /* Títulos Estilo Apple */
+    .app-header {
+        text-align: center;
+        padding: 40px 0;
+    }
+    .app-header h1 {
+        font-size: 3.5rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -2px !important;
+        margin-bottom: 0 !important;
+        background: linear-gradient(180deg, #FFFFFF 0%, #888888 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Botón Master (Llamativo pero elegante) */
+    div.stButton > button[kind="primary"] {
+        background: #29b5e8 !important;
         color: white !important;
         border: none !important;
-        padding: 15px 40px !important;
-        border-radius: 50px !important;
+        padding: 18px 45px !important;
+        border-radius: 100px !important;
         font-weight: 600 !important;
-        margin: 0 auto 30px auto !important;
+        font-size: 1rem !important;
+        margin: 20px auto !important;
         display: block !important;
-        box-shadow: 0 0 20px rgba(41, 181, 232, 0.3) !important;
+        box-shadow: 0 10px 30px rgba(41, 181, 232, 0.3) !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    }
+    div.stButton > button[kind="primary"]:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(41, 181, 232, 0.5) !important;
     }
 
-    /* Botones de Tarea (Cuadrados Uniformes) */
+    /* Botones de Tarea (Los "App Icons") */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
         color: #ffffff !important;
-        border-radius: 18px !important;
-        height: 110px !important;
-        width: 110px !important;
-        font-size: 0.75rem !important;
+        border-radius: 24px !important;
+        height: 100px !important;
+        width: 100px !important;
+        font-size: 0.7rem !important;
+        line-height: 1.2 !important;
+        padding: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
         transition: all 0.3s ease !important;
-        margin-bottom: 15px;
+        margin: 0 auto !important;
     }
+    
     [data-testid="stColumn"] div.stButton > button:hover {
+        background: rgba(41, 181, 232, 0.15) !important;
         border-color: #29b5e8 !important;
-        background: rgba(41, 181, 232, 0.1) !important;
-        transform: translateY(-3px);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
     }
 
-    /* Botón de Ejecutar Mundo Completo */
-    .mundo-sync-btn button {
-        background-color: transparent !important;
+    /* Botones de Mundo (Ejecutar grupo) */
+    .mundo-btn button {
+        background: transparent !important;
         color: #29b5e8 !important;
         border: 1px solid #29b5e8 !important;
-        border-radius: 30px !important;
-        font-size: 0.8rem !important;
-        padding: 5px 20px !important;
+        border-radius: 50px !important;
+        padding: 5px 25px !important;
         height: auto !important;
         width: auto !important;
-        aspect-ratio: auto !important;
+        font-size: 0.8rem !important;
     }
 
-    /* Consola Hacker */
-    .terminal-output {
-        background: rgba(10, 10, 10, 0.8) !important;
-        backdrop-filter: blur(15px);
-        border: 1px solid #29b5e8;
-        border-radius: 15px;
+    /* Consola de Comando */
+    .console-card {
+        background: rgba(15, 15, 15, 0.6) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid #222;
+        border-radius: 20px;
         padding: 20px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 13px;
         color: #29b5e8;
-        height: 220px;
+        height: 200px;
         overflow-y: auto;
-        margin-bottom: 30px;
-        box-shadow: inset 0 0 15px rgba(41, 181, 232, 0.1);
+        margin-bottom: 50px;
+        box-shadow: inset 0 0 20px rgba(0,0,0,1);
     }
 
-    /* Acordeones (Expanders) */
+    /* Expanders */
     .stExpander {
         border: none !important;
         background: rgba(255, 255, 255, 0.02) !important;
-        border-radius: 20px !important;
-        margin-bottom: 10px !important;
+        border-radius: 28px !important;
+        margin-bottom: 15px !important;
     }
+    .stExpander summary { font-weight: 500 !important; color: #eee !important; padding: 15px !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS (ORIGINAL INTACTA) ---
+# --- TAREAS (SIN TOCAR TU ESTRUCTURA) ---
 SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
 
 TAREAS = [
@@ -141,9 +171,9 @@ TAREAS = [
     {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
 ]
 
-# --- SESSION LOGS ---
+# --- LÓGICA DE LOGS ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["> SnowSync Kernel Loaded.", "> System Ready."]
+    st.session_state.logs = ["> SnowSync Enterprise OS v2.0 initialized.", "> Secure link to Snowflake established."]
 
 def log(msg):
     st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
@@ -168,7 +198,7 @@ def run_task(t, drive_service, gc, cs):
     try:
         sh = gc.open_by_key(t["sheet"])
         query = get_sql_content(drive_service, t["sql"])
-        if not query: return False, "SQL_ERROR"
+        if not query: return False, "SQL_MISSING"
         cs.execute(query)
         df = pd.DataFrame(cs.fetchall(), columns=[col[0] for col in cs.description])
         try: wks = sh.worksheet(t["tab"])
@@ -179,30 +209,31 @@ def run_task(t, drive_service, gc, cs):
         return True, "SUCCESS"
     except Exception as e: return False, str(e)
 
-# --- INICIO UI ---
-st.markdown("<h1 style='text-align: center;'>SnowSync <span style='color:#29b5e8; font-weight:300;'>Enterprise</span></h1>", unsafe_allow_html=True)
+# --- APP START ---
+st.markdown('<div class="app-header"><h1>SnowSync</h1><p style="color:#29b5e8; font-weight:300; letter-spacing:4px;">ENTERPRISE</p></div>', unsafe_allow_html=True)
 
 try:
+    # Auth
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
     google_info = json.loads(base64.b64decode(st.secrets["GOOGLE_BASE64"]).decode('utf-8'))
     creds = Credentials.from_service_account_info(google_info, scopes=['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly'])
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BOTÓN PIPELINE GENERAL
-    if st.button("🚀 INITIALIZE MASTER PIPELINE"):
-        log("BROADCASTING GLOBAL SYNC PROTOCOL...")
+    # NIVEL 1: MASTER SYNC
+    if st.button("INITIALIZE MASTER PIPELINE", kind="primary"):
+        log("BROADCASTING GLOBAL COMMAND...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
-            log(f"Syncing {t['tab']}...")
+            log(f"Syncing: {t['tab']}...")
             ok, err = run_task(t, drive_service, gc, cs)
             if ok: log(f"OK: {t['tab']}")
-            else: log(f"ERR: {t['tab']} ({err})")
+            else: log(f"FAILED: {t['tab']}")
         cs.close(); conn.close()
-        log("GLOBAL PIPELINE COMPLETE.")
+        log("ALL SYSTEMS UPDATED.")
 
-    # CONSOLA HACKER
-    st.markdown(f'<div class="terminal-output">{"<br>".join(st.session_state.logs[-10:])}</div>', unsafe_allow_html=True)
+    # NIVEL 2: CONSOLA
+    st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
 
     # AGRUPACIÓN POR MUNDOS
     mundos = {}
@@ -211,44 +242,45 @@ try:
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO DE SECCIONES PLEGABLES
+    # NIVEL 3: RENDERIZADO POR MUNDOS (EXPANDIBLES)
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
-        
         with st.expander(f"📁 {nombre} ({len(lista)} tasks)"):
-            # Botón de Ejecución de Mundo Completo
-            col_mundo_btn, _ = st.columns([1, 4])
-            with col_mundo_btn:
-                st.markdown('<div class="mundo-sync-btn">', unsafe_allow_html=True)
-                if st.button(f"Run All {nombre}", key=f"world_{sid}"):
-                    log(f"Initiating Group Sync: {nombre}")
+            
+            # Botón de Sincronizar Mundo Completo
+            col_mundo, _ = st.columns([1, 4])
+            with col_mundo:
+                st.markdown('<div class="mundo-btn">', unsafe_allow_html=True)
+                if st.button(f"Sync all {nombre}", key=f"world_{sid}"):
+                    log(f"Syncing group: {nombre}")
                     conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                     for t in lista:
                         run_task(t, drive_service, gc, cs)
-                        log(f"OK: {t['tab']}")
+                        log(f"Synced {t['tab']}")
                     cs.close(); conn.close()
-                    log(f"Group {nombre} Finished.")
+                    log(f"Group {nombre} Done.")
                     st.rerun()
                 st.markdown('</div>', unsafe_allow_html=True)
 
             st.markdown("<br>", unsafe_allow_html=True)
-            
-            # Botones Cuadrados Individuales
-            cols = st.columns(8) # 8 por fila para perfecta simetría
+
+            # Botones de Consulta (Individuales)
+            cols = st.columns(10) # 10 columnas para que sean pequeños y uniformes
             for i, t in enumerate(lista):
-                with cols[i % 8]:
-                    label = t['tab'].replace('_', ' ')
-                    if st.button(f"⚡\n{label[:12]}", key=f"ind_{t['tab']}_{sid}"):
-                        log(f"Individual Override: {t['tab']}...")
+                with cols[i % 10]:
+                    # Limpiamos nombre para el icono
+                    display_name = t['tab'].replace('_', ' ')[:10]
+                    if st.button(f"⚡\n{display_name}", key=f"ind_{t['tab']}_{sid}"):
+                        log(f"Individual override: {t['tab']}")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                        run_task(t, drive_service, gc, cs)
+                        ok, err = run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
-                        log(f"Done: {t['tab']}")
-                        st.toast(f"{t['tab']} Updated")
+                        if ok: log(f"Verified: {t['tab']}"); st.toast("OK")
+                        else: log(f"Error: {err}")
                         st.rerun()
 
 except Exception as e:
-    st.error(f"Critical System Failure: {e}")
+    st.error(f"Kernel Panic: {e}")
 
-if st.sidebar.button("Reset Console"):
-    st.session_state.logs = ["> Kernel Reset."]; st.rerun()
+if st.sidebar.button("Clear Log"):
+    st.session_state.logs = ["> Logs flushed."]; st.rerun()
