@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS ULTRA PRO V5 (APPLE DESIGN + SNOWFLAKE VECTOR) ---
+# --- CSS PROFESIONAL REFINADO (APPLE MINIMALISM) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -38,127 +38,114 @@ st.markdown("""
     }
 
     .stApp {
-        background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%);
+        background: radial-gradient(circle at 50% -20%, #111b27 0%, #000000 100%);
     }
 
-    /* Títulos Estilo Apple */
     .app-header {
         text-align: center;
         padding: 40px 0 20px 0;
     }
     .app-header h1 {
-        font-size: 3.5rem !important;
+        font-size: 3rem !important;
         font-weight: 600 !important;
-        letter-spacing: -2px !important;
+        letter-spacing: -1.5px !important;
         margin-bottom: 0 !important;
-        color: white;
+        color: #FFFFFF;
     }
 
     /* ----------------------------------------------------------- */
-    /* EL NUEVO BOTÓN MAESTRO: EJECUTAR MASIVO (VECTOR & GLOW) */
+    /* BOTÓN MAESTRO: EJECUTAR MASIVO (ESTILO REFINADO) */
     /* ----------------------------------------------------------- */
-    
-    /* Contenedor del botón para centrarlo y darle el efecto glow */
     .master-btn-container {
         width: 100%;
         display: flex;
         justify-content: center;
         margin: 20px 0 50px 0;
-        position: relative;
     }
 
-    /* Estilo base del botón Streamlit */
     .stButton > button:first-child {
-        background-color: #29b5e8 !important; /* Azul Copo de Nieve */
+        background: linear-gradient(135deg, #1fa2d4 0%, #157396 100%) !important;
         color: white !important;
         border-radius: 50px !important;
-        padding: 16px 50px 16px 80px !important; /* Espacio para el vector */
-        font-weight: 600 !important;
-        font-size: 1.1rem !important;
+        padding: 16px 50px 16px 80px !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 1.5px !important;
-        border: none !important;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-        box-shadow: 0 10px 30px rgba(41, 181, 232, 0.4) !important;
+        letter-spacing: 2px !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        transition: all 0.5s ease !important;
+        /* Neón Sutil */
+        box-shadow: 0 10px 30px rgba(31, 162, 212, 0.15) !important;
         position: relative;
     }
 
-    /* El Vector del Copo de Nieve (Incrustado en CSS) */
     .stButton > button:first-child::before {
         content: '';
         position: absolute;
-        left: 25px;
+        left: 30px;
         top: 50%;
         transform: translateY(-50%);
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         background-color: white;
-        /* Imagen Vectorial SVG del copo de nieve Snowflake */
+        opacity: 0.9;
         -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
         mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        transition: all 0.4s ease;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-size: contain; mask-size: contain;
     }
 
-    /* Hover del Botón Maestro */
     .stButton > button:first-child:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 20px 50px rgba(41, 181, 232, 0.7) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(31, 162, 212, 0.25) !important;
     }
 
-    /* Hover del Copo de Nieve (Gira levemente) */
-    .stButton > button:first-child:hover::before {
-        transform: translateY(-50%) rotate(30deg);
-    }
-
-    /* ----------------------------------------------------------- */
-
-    /* BOTONES DE TAREA (DENTRO DE COLUMNAS) */
+    /* BOTONES DE TAREA (SUTILES) */
     [data-testid="stColumn"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.04) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #ffffff !important;
-        border-radius: 20px !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        color: #a0a0a0 !important;
+        border-radius: 16px !important;
         height: 100px !important;
         width: 100px !important;
         font-size: 0.7rem !important;
-        padding: 5px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        font-weight: 400 !important;
+        transition: all 0.3s ease !important;
         margin: 0 auto !important;
     }
     
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(41, 181, 232, 0.1) !important;
-        border-color: #29b5e8 !important;
-        color: #29b5e8 !important;
+        background: rgba(31, 162, 212, 0.05) !important;
+        border-color: rgba(31, 162, 212, 0.4) !important;
+        color: #ffffff !important;
     }
 
-    /* CONSOLA DE COMANDO */
+    /* CONSOLA */
     .console-card {
-        background: rgba(10, 10, 10, 0.5) !important;
+        background: rgba(0, 0, 0, 0.3) !important;
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 20px;
         padding: 20px;
         font-family: 'JetBrains Mono', monospace;
-        color: #29b5e8;
+        color: #1fa2d4;
         height: 180px;
         overflow-y: auto;
         margin-bottom: 40px;
         font-size: 0.8rem;
     }
 
-    /* EXPANDERS (MUNDOS) */
+    /* EXPANDERS SIN ICONOS DE CARPETA */
     .stExpander {
         border: none !important;
         background: rgba(255, 255, 255, 0.02) !important;
         border-radius: 24px !important;
         margin-bottom: 10px !important;
+    }
+    .stExpander summary {
+        font-weight: 500 !important;
+        color: #ffffff !important;
+        padding: 15px 25px !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -198,10 +185,10 @@ TAREAS = [
 
 # --- LOGS ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["> Kernel status: OPTIMAL", "> Encryption: AES-256 Enabled"]
+    st.session_state.logs = ["› SnowSync initialized."]
 
 def add_log(msg):
-    st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
+    st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
 # --- CORE FUNCTIONS ---
 def get_sql_content(drive_service, file_name):
@@ -235,7 +222,7 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1><p style="color:#29b5e8; font-weight:300; letter-spacing:4px; text-align:center;">ENTERPRISE EDITION</p></div>', unsafe_allow_html=True)
+st.markdown('<div class="app-header"><h1>SnowSync</h1></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -244,14 +231,10 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # -----------------------------------------------------------
-    # BOTÓN MAESTRO: EJECUTAR MASIVO (VECTOR & GLOW)
-    # -----------------------------------------------------------
+    # BOTÓN MAESTRO
     st.markdown('<div class="master-btn-container">', unsafe_allow_html=True)
-    
-    # El texto ahora es "EJECUTAR MASIVO" y el emoji ⚙️ va al final
-    if st.button("EJECUTAR MASIVO ⚙️", key="masivo_btn"):
-        add_log("MASTER COMMAND DETECTED: INITIALIZING FULL PIPELINE...")
+    if st.button("EJECUTAR MASIVO", key="masivo_btn"):
+        add_log("BROADCASTING GLOBAL PIPELINE...")
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
@@ -259,9 +242,7 @@ try:
         cs.close(); conn.close()
         add_log("PIPELINE COMPLETE.")
         st.rerun()
-        
     st.markdown('</div>', unsafe_allow_html=True)
-    # -----------------------------------------------------------
 
     # CONSOLA
     st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
@@ -276,25 +257,27 @@ try:
     # MUNDOS PLEGABLES
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, f"Dataset {sid[:6]}")
-        with st.expander(f"📁 {nombre}"):
-            # BOTÓN DE MUNDO
-            if st.button(f"Sync All {nombre}", key=f"w_{sid}"):
-                add_log(f"Group Sync: {nombre}")
-                conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
-                for t in lista:
-                    run_task(t, drive_service, gc, cs)
-                    add_log(f"Success: {t['tab']}")
-                cs.close(); conn.close()
-                st.rerun()
+        with st.expander(f"{nombre}"):
+            # Botón de Mundo
+            col_mundo, _ = st.columns([1, 4])
+            with col_mundo:
+                if st.button(f"Sync All", key=f"w_{sid}"):
+                    add_log(f"Group Sync: {nombre}")
+                    conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
+                    for t in lista:
+                        run_task(t, drive_service, gc, cs)
+                        add_log(f"Success: {t['tab']}")
+                    cs.close(); conn.close()
+                    st.rerun()
             
             st.markdown("<br>", unsafe_allow_html=True)
             
-            # BOTONES CUADRADOS
-            cols = st.columns(10) # 10 por fila para que se vean compactos y Apple Style
+            # Botones Cuadrados
+            cols = st.columns(10)
             for i, t in enumerate(lista):
                 with cols[i % 10]:
                     display = t['tab'].replace('_', ' ')[:10]
-                    if st.button(f"⚡\n{display}", key=f"i_{t['tab']}_{sid}"):
+                    if st.button(f"{display}", key=f"i_{t['tab']}_{sid}"):
                         add_log(f"Overriding {t['tab']}...")
                         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
                         run_task(t, drive_service, gc, cs)
@@ -305,5 +288,5 @@ try:
 except Exception as e:
     st.error(f"Critical System Failure: {e}")
 
-if st.sidebar.button("Clear Log"):
+if st.sidebar.button("Flush Console"):
     st.session_state.logs = ["> Logs flushed."]; st.rerun()
