@@ -27,7 +27,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS APPLE V12 (DISEÑO PURO, SIN TOCAR PYTHON) ---
+# --- CSS APPLE ULTIMATE (FIEL AL DISEÑO, RESPETUOSO CON LA EJECUCIÓN) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
@@ -41,17 +41,17 @@ st.markdown("""
         background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
     }
 
-    /* HEADER TRANSPARENTE */
+    /* HEADER SIN RECUADROS */
     .app-header { 
         display: flex; align-items: center; justify-content: center;
-        padding: 50px 0 30px 0; background: transparent !important; gap: 25px;
+        padding: 50px 0 30px 0; background: transparent !important; gap: 30px;
     }
     .big-snowflake { font-size: 6rem; color: #29b5e8; opacity: 0.8; }
     .title-text-group { text-align: left; }
     .app-header h1 { font-size: 3.2rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 8px; font-size: 0.8rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BOTÓN MAESTRO IZQUIERDA */
+    /* BOTÓN MAESTRO: GRANDE IZQUIERDA */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
@@ -67,7 +67,7 @@ st.markdown("""
         box-shadow: 0 10px 25px rgba(41, 181, 232, 0.2) !important;
     }
 
-    /* BOTÓN LIMPIAR DERECHA */
+    /* BOTÓN LIMPIAR: PEQUEÑO DERECHA */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -75,10 +75,11 @@ st.markdown("""
         border-radius: 8px !important;
         padding: 4px 15px !important;
         font-size: 0.65rem !important;
+        text-transform: uppercase !important;
         float: right !important;
     }
 
-    /* BOTONES TAREA 16:9 - FIX TEXTO VERTICAL */
+    /* BOTONES TAREA: 16:9 RECTANGULAR HORIZONTAL */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -87,21 +88,15 @@ st.markdown("""
         height: 75px !important;
         width: 100% !important;
         font-size: 0.75rem !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        line-height: 1.2 !important;
-    }
-    [data-testid="stColumn"] div.stButton > button:hover {
-        border-color: #29b5e8 !important;
-        background: rgba(41, 181, 232, 0.05) !important;
-        transform: translateY(-2px);
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        transition: all 0.3s ease !important;
+        display: block !important;
     }
 
-    /* CONSOLA */
+    /* CONSOLA AZUL SNOWFLAKE */
     .terminal-window {
         background-color: #050505;
         color: #29b5e8;
@@ -119,7 +114,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # =========================================================
-# TU BLOQUE DE TAREAS ORIGINAL (INTACTO)
+# ESTRUCTURA DE DATOS ORIGINAL (ESTRICTAMENTE IGUAL)
 # =========================================================
 SF_PARAMS = {
     'user': 'bryan.zuniga@rappi.com',
@@ -379,12 +374,12 @@ TAREAS = [
 
 # --- LÓGICA DE LOGS (ESTABLE) ---
 if 'logs' not in st.session_state:
-    st.session_state.logs = ["› SnowSync System Online."]
+    st.session_state.logs = ["› SnowSync Kernel Ready."]
 
 def log(msg):
     st.session_state.logs.append(f"› {time.strftime('%H:%M:%S')} | {msg}")
 
-# --- FUNCIONES DE EJECUCIÓN (INTACTAS) ---
+# --- CORE FUNCTIONS (ORIGINALES E INFALIBLES) ---
 def get_sql_content(drive_service, file_name):
     query = f"name='{file_name}' and trashed=false"
     results = drive_service.files().list(q=query, fields='files(id, name)').execute()
@@ -420,34 +415,33 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE COMANDO
-    col_masivo, col_empty, col_clear = st.columns([2, 1, 1])
+    # COMANDOS
+    col_masivo, col_clear = st.columns([3, 1])
     with col_masivo:
         btn_masivo = st.button("EJECUTAR MASIVO", key="masivo_btn")
     with col_clear:
         if st.button("Limpiar Consola", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
 
-    # CONSOLA (SIMPLE Y DIRECTA)
-    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-10:]])
+    # CONSOLA
+    log_content = "".join([f'<div class="log-line">{l}</div>' for l in st.session_state.logs[-12:]])
     st.markdown(f'<div class="terminal-window">{log_content}</div>', unsafe_allow_html=True)
 
-    # Lógica Masiva (Secuencial sin interrupciones)
+    # LÓGICA MASIVA (SIN INTERRUPCIONES DE RERUN)
     if btn_masivo:
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            log(f"Sync: {t['tab']} OK")
+            log(f"Synced: {t['tab']} OK")
         cs.close(); conn.close(); st.rerun()
 
-    # AGRUPACIÓN POR MUNDOS
+    # MUNDOS
     mundos = {}
     for tarea in TAREAS:
         sid = tarea["sheet"]
         if sid not in mundos: mundos[sid] = []
         mundos[sid].append(tarea)
 
-    # RENDERIZADO
     for sid, lista in mundos.items():
         nombre = NOMBRES_MUNDOS.get(sid, sid[:8])
         with st.expander(f"{nombre}"):
@@ -466,4 +460,4 @@ try:
                         cs.close(); conn.close(); log(f"Task {t['tab']} OK."); st.rerun()
 
 except Exception as e:
-    st.error(f"Boot Error: {e}")
+    st.error(f"Error: {e}")
