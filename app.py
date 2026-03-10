@@ -15,7 +15,7 @@ from googleapiclient.http import MediaIoBaseDownload
 st.set_page_config(page_title="SnowSync Enterprise", page_icon="❄️", layout="wide")
 
 # =========================================================
-# CONFIGURACIÓN DE NOMBRES DE MUNDOS
+# CONFIGURACIÓN DE NOMBRES DE MUNDOS (EDITA AQUÍ)
 # =========================================================
 NOMBRES_MUNDOS = {
     "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s": "Operaciones CH",
@@ -27,12 +27,12 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "Bags Supply"
 }
 
-# --- CSS DEFINITIVO: APPLE LUXURY + LEGIBILIDAD TOTAL ---
+# --- DISEÑO APPLE PREMIUM (CSS) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono&display=swap');
 
-    html, body, [class*="css"] {
+    html, body, [class*="css"], .stMarkdown {
         font-family: 'Poppins', sans-serif !important;
         background-color: #000000 !important;
     }
@@ -42,25 +42,12 @@ st.markdown("""
     }
 
     /* Títulos */
-    .app-header { text-align: center; padding: 40px 0 20px 0; }
-    .app-header h1 {
-        font-size: 3.2rem !important;
-        font-weight: 600 !important;
-        letter-spacing: -1.5px !important;
-        color: #FFFFFF;
-        margin-bottom: 0px !important;
-    }
-    .app-header p {
-        color: #29b5e8;
-        font-weight: 400;
-        letter-spacing: 6px;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        margin-top: -10px !important;
-    }
+    .app-header { text-align: center; padding: 30px 0; }
+    .app-header h1 { font-size: 3rem !important; font-weight: 600 !important; color: white; margin-bottom: 0px !important; }
+    .app-header p { color: #29b5e8; letter-spacing: 5px; font-size: 0.8rem; text-transform: uppercase; }
 
-    /* BOTÓN MAESTRO: EJECUTAR MASIVO */
-    .stButton > button:first-child {
+    /* BOTÓN MASIVO (SNOWFLAKE AZUL + ANIMACIÓN) */
+    div.stButton > button:first-child {
         background: linear-gradient(135deg, #1fa2d4 0%, #157396 100%) !important;
         color: white !important;
         border-radius: 50px !important;
@@ -70,40 +57,55 @@ st.markdown("""
         text-transform: uppercase !important;
         letter-spacing: 2px !important;
         border: none !important;
-        box-shadow: 0 10px 40px rgba(31, 162, 212, 0.1) !important;
+        box-shadow: 0 10px 30px rgba(31, 162, 212, 0.1) !important;
         transition: all 0.4s ease !important;
         position: relative;
         margin: 20px auto !important;
         display: block !important;
     }
-    .stButton > button:first-child::before {
+    
+    div.stButton > button:first-child::before {
         content: '';
         position: absolute; left: 35px; top: 50%; transform: translateY(-50%);
         width: 32px; height: 32px; background-color: white;
         -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
         mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M444.6 288.1L400 320l44.6 31.9c10.4 7.4 12.8 21.8 5.4 32.2-7.4 10.4-21.8 12.8-32.2 5.4L352 344v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L256 320l-49.8 24v60.9c0 12.8-10.4 23.1-23.1 23.1-12.8 0-23.1-10.4-23.1-23.1V344L114.1 389.5c-10.4 7.4-24.8 5-32.2-5.4-7.4-10.4-5-24.8 5.4-32.2L112 320L67.4 288.1c-10.4-7.4-12.8-21.8-5.4-32.2 7.4-10.4 21.8-12.8 32.2-5.4L112 272l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1 12.8 0 23.1 10.4 23.1 23.1V272L256 296l49.8-24v-60.9c0-12.8 10.4-23.1 23.1-23.1s23.1 10.4 23.1 23.1V272l49.8 45.5 44.6-31.9c10.4-7.4 24.8-5 32.2 5.4 7.4 10.4 5 24.8-5.4 32.2z"/></svg>');
         -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        transition: transform 0.6s ease;
     }
+    
+    div.stButton > button:first-child:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 45px rgba(31, 162, 212, 0.2) !important;
+    }
+    div.stButton > button:first-child:hover::before { transform: translateY(-50%) rotate(180deg); }
 
-    /* BOTONES DE TAREA: LEGIBILIDAD HORIZONTAL */
+    /* BOTONES DE TAREA (CUADRADOS UNIFORMES) */
     [data-testid="stColumn"] div.stButton > button {
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         color: #ffffff !important;
         border-radius: 18px !important;
-        height: 100px !important;
-        width: 100% !important;
-        font-size: 0.8rem !important;
+        height: 110px !important;
+        width: 110px !important;
+        min-width: 110px !important;
+        max-width: 110px !important;
+        font-size: 0.75rem !important;
         font-weight: 500 !important;
-        display: block !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         text-align: center !important;
         padding: 10px !important;
-        white-space: normal !important; /* IMPORTANTE: Permite saltos de línea naturales */
+        white-space: normal !important;
         word-wrap: break-word !important;
+        transition: all 0.3s ease !important;
+        margin: 0 auto !important;
     }
     [data-testid="stColumn"] div.stButton > button:hover {
-        background: rgba(41, 181, 232, 0.1) !important;
         border-color: #29b5e8 !important;
+        background: rgba(41, 181, 232, 0.05) !important;
+        transform: translateY(-3px);
     }
 
     /* CONSOLA */
@@ -124,7 +126,7 @@ st.markdown("""
     /* EXPANDERS MUNDOS */
     .stExpander {
         border: none !important;
-        background: rgba(255, 255, 255, 0.02) !important;
+        background: rgba(255, 255, 255, 0.015) !important;
         border-radius: 24px !important;
         margin-bottom: 12px !important;
     }
@@ -136,45 +138,272 @@ st.markdown("""
         color: #29b5e8 !important;
         border: 1px solid #29b5e8 !important;
         border-radius: 30px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.7rem !important;
         padding: 2px 20px !important;
-        height: 30px !important;
+        height: 32px !important;
         width: auto !important;
+        min-width: 0 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE DATOS (ORIGINAL) ---
-SF_PARAMS = {'user': 'bryan.zuniga@rappi.com', 'account': 'hg51401', 'authenticator': 'snowflake', 'warehouse': 'RP_PERSONALUSER_WH', 'database': 'FIVETRAN', 'schema': 'PUBLIC', 'role': 'RP_READ_ACCESS_PU_ROLE'}
+# =========================================================
+# ESTRUCTURA DE DATOS ORIGINAL (SIN CAMBIOS)
+# =========================================================
+SF_PARAMS = {
+    'user': 'bryan.zuniga@rappi.com',
+    'account': 'hg51401',
+    'authenticator': 'snowflake',
+    'warehouse': 'RP_PERSONALUSER_WH',
+    'database': 'FIVETRAN',
+    'schema': 'PUBLIC',
+    'role': 'RP_READ_ACCESS_PU_ROLE'
+}
 
 TAREAS = [
-    {"sql": "STOCK_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "STOCK_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "DOI_TIENDA_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "DOI_TIENDA_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "SALES_CH.sql", "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s", "tab": "SALES_CH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "GOLDEN_DANI.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "Summary Golden", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_WAREHOUSE.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "WAREHOUSE_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_COUNTRY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "COUNTRY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_PRODUCT.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "PRODUCT_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_CITY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "CITY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_DETAIL.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "DETAIL_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_CATEGORY.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "CATEGORY_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_SUPPLIER.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "SUPPLIER_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_SIN_CH.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "SIN_CH_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_MODEL.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "MODEL_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_ABS.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "ABS_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "AVL_GOLDEN_WEEK.sql", "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok", "tab": "WEEK_AVL", "c_start": "A3", "c_end": "N", "p_row": 3, "p_col": 1},
-    {"sql": "SKUS_X_DIA.sql", "sheet": "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0", "tab": "SKUS", "c_start": "A1", "c_end": "E", "p_row": 1, "p_col": 1},
-    {"sql": "AVL_GOLDEN_DANI.sql", "sheet": "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA", "tab": "AVL", "c_start": "A1", "c_end": "C", "p_row": 1, "p_col": 1},
-    {"sql": "DOI_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "DOI", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "WH_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "WH", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "CITY_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "CITY", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "SUPPLIER_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "SUPPLIER", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "PRODUCT_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "PRODUCT", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "TODAY_BY_DAY.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "CURRENT", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "DETAIL.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "DETAIL", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "ROQ_PO.sql", "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I", "tab": "ROQ_PO", "c_start": "A1", "c_end": "F", "p_row": 1, "p_col": 1},
-    {"sql": "INVENTARIOS_DOS_DUENOS.sql", "sheet": "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU", "tab": "BASE", "c_start": "A1", "c_end": "L", "p_row": 1, "p_col": 1},
-    {"sql": "STOCK_BOLSAS.sql", "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0", "tab": "BASE", "c_start": "A1", "c_end": "X", "p_row": 1, "p_col": 1}
+    {
+        "sql": "STOCK_CH.sql",
+        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
+        "tab": "STOCK_CH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "DOI_TIENDA_CH.sql",
+        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
+        "tab": "DOI_TIENDA_CH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "SALES_CH.sql",
+        "sheet": "1UR_0V7tkpqOTnmeQ9zVbproWiZk3xncUBSD6Ft2XU6s",
+        "tab": "SALES_CH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "GOLDEN_DANI.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "Summary Golden",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_WAREHOUSE.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "WAREHOUSE_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_COUNTRY.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "COUNTRY_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_PRODUCT.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "PRODUCT_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_CITY.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "CITY_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_DETAIL.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "DETAIL_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_CATEGORY.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "CATEGORY_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_SUPPLIER.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "SUPPLIER_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_SIN_CH.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "SIN_CH_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_MODEL.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "MODEL_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_ABS.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "ABS_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_WEEK.sql",
+        "sheet": "1exrUKZgpgKIPR7LWPOYtNK6lT6HddtrQvEwrmA_F8Ok",
+        "tab": "WEEK_AVL",
+        "c_start": "A3",
+        "c_end": "N",
+        "p_row": 3,
+        "p_col": 1
+    },
+    {
+        "sql": "SKUS_X_DIA.sql",
+        "sheet": "1E4L8mssR-C1BXQd67YZnMAuSgALEXVpwQmGN1Nayxv0",
+        "tab": "SKUS",
+        "c_start": "A1",
+        "c_end": "E",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "AVL_GOLDEN_DANI.sql",
+        "sheet": "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA",
+        "tab": "AVL",
+        "c_start": "A1",
+        "c_end": "C",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "DOI_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "DOI",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "WH_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "WH",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "CITY_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "CITY",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "SUPPLIER_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "SUPPLIER",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "PRODUCT_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "PRODUCT",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "TODAY_BY_DAY.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "CURRENT",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "DETAIL.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "DETAIL",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "ROQ_PO.sql",
+        "sheet": "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I",
+        "tab": "ROQ_PO",
+        "c_start": "A1",
+        "c_end": "F",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "INVENTARIOS_DOS_DUENOS.sql",
+        "sheet": "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU",
+        "tab": "BASE",
+        "c_start": "A1",
+        "c_end": "L",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "STOCK_BOLSAS.sql",
+        "sheet": "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0",
+        "tab": "BASE",
+        "c_start": "A1",
+        "c_end": "X",
+        "p_row": 1,
+        "p_col": 1
+    }
 ]
 
 # --- LÓGICA DE LOGS ---
@@ -184,7 +413,7 @@ if 'logs' not in st.session_state:
 def log(msg):
     st.session_state.logs.append(f"> {time.strftime('%H:%M:%S')} | {msg}")
 
-# --- CORE FUNCTIONS ---
+# --- FUNCIONES CORE ---
 def get_sql_content(drive_service, file_name):
     try:
         query = f"name='{file_name}' and trashed=false"
@@ -216,7 +445,7 @@ def run_task(t, drive_service, gc, cs):
     except: return False
 
 # --- UI START ---
-st.markdown('<div class="app-header"><h1>SnowSync</h1><p>ENTERPRISE EDITION</p></div>', unsafe_allow_html=True)
+st.markdown('<div class="app-header"><h1>SnowSync</h1><p>Enterprise Edition</p></div>', unsafe_allow_html=True)
 
 try:
     sf_token = st.secrets["SNOWFLAKE_TOKEN"]
@@ -231,15 +460,15 @@ try:
         conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
         for t in TAREAS:
             run_task(t, drive_service, gc, cs)
-            log(f"Synced: {t['tab']}")
+            log(f"Sync: {t['tab']}")
         cs.close(); conn.close()
-        log("PIPELINE SUCCESSFUL.")
+        log("PIPELINE COMPLETE.")
         st.rerun()
 
     # NIVEL 2: CONSOLA
     st.markdown(f'<div class="console-card">{"<br>".join(st.session_state.logs[-8:])}</div>', unsafe_allow_html=True)
 
-    # AGRUPACIÓN
+    # AGRUPACIÓN (LÓGICA INTERNA)
     mundos = {}
     for tarea in TAREAS:
         sid = tarea["sheet"]
@@ -265,10 +494,10 @@ try:
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            # Grid de Botones Individuales (Cuadrados Legibles)
-            cols = st.columns(8) # 8 columnas para no romper el texto
+            # Grid de Botones Individuales (CUADRADOS ESTÁNDAR)
+            cols = st.columns(10) 
             for i, t in enumerate(lista):
-                with cols[i % 8]:
+                with cols[i % 10]:
                     clean_name = t['tab'].replace('_', ' ')
                     if st.button(clean_name, key=f"btn_{t['tab']}_{sid}"):
                         log(f"Iniciando: {t['tab']}")
@@ -276,8 +505,8 @@ try:
                         run_task(t, drive_service, gc, cs)
                         cs.close(); conn.close()
                         log(f"Finalizado: {t['tab']}")
-                        st.toast("Success")
+                        st.toast(f"Updated {t['tab']}")
                         st.rerun()
 
 except Exception as e:
-    st.error(f"Booting failed: {e}")
+    st.error(f"Initialization Error: {e}")
