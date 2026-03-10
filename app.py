@@ -444,8 +444,10 @@ try:
     SF_PARAMS['password'] = sf_token
 
     # BARRA DE COMANDO
-    col_l, col_r = st.columns([4, 1])
+    col_l, col_r = st.columns([1, 1]) # Ratio 1:1 para dividir la pantalla a la mitad
+    
     with col_l:
+        # El CSS 'masivo_btn' ya tiene el ancho definido, aquí se queda pegado a la izquierda
         if st.button("EJECUTAR MASIVO", key="masivo_btn"):
             add_log("MASTER SYNC INITIATED...")
             conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
@@ -456,8 +458,11 @@ try:
             st.rerun()
 
     with col_r:
-        if st.button("Clear Console", key="clear_log"):
+        # Creamos un div con alineación derecha para asegurar que se pegue al borde
+        st.markdown('<div style="text-align: right;">', unsafe_allow_html=True)
+        if st.button("Limpiar Consola", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # CONSOLA
     log_content = "<br>".join(st.session_state.logs[-12:])
