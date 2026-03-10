@@ -28,7 +28,7 @@ NOMBRES_MUNDOS = {
     "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY"
 }
 
-# --- CSS APPLE V17 (ESTANDARIZACIÓN TOTAL & FIX ESTRUCTURA) ---
+# --- CSS APPLE DEFINITIVO (POSICIONAMIENTO EXTREMO & BOTONES 16:9) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=JetBrains+Mono&display=swap');
@@ -42,30 +42,38 @@ st.markdown("""
         background: radial-gradient(circle at 50% -20%, #1a2a3a 0%, #000000 100%) !important;
     }
 
-    /* HEADER */
+    /* ELIMINAR MÁRGENES LATERALES DE STREAMLIT */
+    .block-container {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+
+    /* HEADER TRANSPARENTE */
     .app-header { 
         display: flex; align-items: center; justify-content: center;
-        padding: 40px 0 20px 0; background: transparent !important; gap: 25px;
+        padding: 40px 0 30px 0; background: transparent !important; gap: 25px;
     }
     .big-snowflake { font-size: 5rem; color: #29b5e8; opacity: 0.8; }
     .title-text-group { text-align: left; }
     .app-header h1 { font-size: 2.8rem !important; font-weight: 600 !important; color: #FFFFFF !important; margin: 0 !important; }
     .app-header p { color: #29b5e8; letter-spacing: 6px; font-size: 0.75rem; text-transform: uppercase; margin: 0 !important; }
 
-    /* BARRA DE COMANDO */
+    /* BOTÓN MAESTRO (PERSONALIZADO) */
     div.stButton > button[key="masivo_btn"] {
         background: #29b5e8 !important;
         color: white !important;
+        border: none !important;
         border-radius: 10px !important;
         padding: 10px 40px !important;
         font-size: 0.9rem !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 2px !important;
-        width: auto !important;
-        min-width: 250px;
+        width: 320px !important;
+        box-shadow: 0 10px 25px rgba(41, 181, 232, 0.2) !important;
     }
 
+    /* BOTÓN LIMPIAR (PERSONALIZADO PEQUEÑO) */
     div.stButton > button[key="clear_log"] {
         background: transparent !important;
         color: #555 !important;
@@ -73,33 +81,30 @@ st.markdown("""
         border-radius: 8px !important;
         padding: 4px 15px !important;
         font-size: 0.65rem !important;
-        float: right !important;
+        text-transform: uppercase !important;
+    }
+    div.stButton > button[key="clear_log"]:hover {
+        color: #29b5e8 !important;
+        border-color: #29b5e8 !important;
     }
 
-    /* BOTONES INTERNOS: ESTANDARIZACIÓN 16:9 */
+    /* BOTONES DE TAREA ESTANDARIZADOS 16:9 */
     [data-testid="stExpander"] div.stButton > button {
         background-color: rgba(255, 255, 255, 0.03) !important;
         color: #ffffff !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 12px !important;
-        
-        /* Geometría Fija */
         height: 75px !important;
         min-height: 75px !important;
-        max-height: 75px !important;
         width: 100% !important;
-        
-        /* Centrado */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        
         font-size: 11px !important;
         text-transform: uppercase;
         line-height: 1.1 !important;
         padding: 8px !important;
-
         overflow: hidden !important;
         white-space: normal !important;
         word-wrap: break-word !important;
@@ -121,6 +126,7 @@ st.markdown("""
         height: 280px;
         overflow-y: auto;
         font-size: 13px;
+        line-height: 1.4;
     }
     .cursor {
         display: inline-block;
@@ -132,7 +138,7 @@ st.markdown("""
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    .stExpander { border: none !important; background: rgba(255, 255, 255, 0.015) !important; border-radius: 15px !important; }
+    .stExpander { border: none !important; background: rgba(255, 255, 255, 0.015) !important; border-radius: 15px !important; margin-bottom: 10px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -443,11 +449,12 @@ try:
     drive_service, gc = build('drive', 'v3', credentials=creds), gspread.authorize(creds)
     SF_PARAMS['password'] = sf_token
 
-    # BARRA DE COMANDO
-    col_l, col_r = st.columns([1, 1]) # Ratio 1:1 para dividir la pantalla a la mitad
+    # BARRA DE COMANDO EXTREMA
+    st.markdown('<div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">', unsafe_allow_html=True)
     
-    with col_l:
-        # El CSS 'masivo_btn' ya tiene el ancho definido, aquí se queda pegado a la izquierda
+    col_left, col_right = st.columns([1, 1])
+    
+    with col_left:
         if st.button("EJECUTAR MASIVO", key="masivo_btn"):
             add_log("MASTER SYNC INITIATED...")
             conn = snowflake.connector.connect(**SF_PARAMS); cs = conn.cursor()
@@ -457,12 +464,13 @@ try:
             cs.close(); conn.close()
             st.rerun()
 
-    with col_r:
-        # Creamos un div con alineación derecha para asegurar que se pegue al borde
-        st.markdown('<div style="text-align: right;">', unsafe_allow_html=True)
+    with col_right:
+        st.markdown('<div style="display: flex; justify-content: flex-end;">', unsafe_allow_html=True)
         if st.button("Limpiar Consola", key="clear_log"):
             st.session_state.logs = ["› Logs flushed."]; st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # CONSOLA
     log_content = "<br>".join(st.session_state.logs[-12:])
