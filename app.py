@@ -25,7 +25,8 @@ NOMBRES_MUNDOS = {
     "1KN6xp10n1_4WWlOBFz2AnQrcFjUyuOE5cwxAjg-bGaA": "AVL ANALYTICS",
     "17epSRURcXCYcnwcdKJhgwFQimaHYb0EYH7tt-e6Km7I": "DAILY RECORDS",
     "1TBmD3vqOmfNRAgceIvfsxHL3lkO62zSrujVF9ed4LnU": "MASTER STOCKS",
-    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY"
+    "1RQ48gT6PO1tb05TAHdKhL9iIuV4XTmJRTNp8qCmNf_0": "BAGS SUPPLY",
+    "10i7ttUr0izAy9VIRQzm_NrocgEPa8rlNSnmIJT4OLaY": "CONTROL TOWER"
 }
 
 # --- CSS APPLE V17 (ESTANDARIZACIÓN TOTAL & FIX ESTRUCTURA) ---
@@ -390,6 +391,15 @@ TAREAS = [
         "tab": "BASE",
         "c_start": "A1",
         "c_end": "X",
+        "p_row": 1,
+        "p_col": 1
+    },
+    {
+        "sql": "CONTROL_TOWER_TRS.sql",
+        "sheet": "10i7ttUr0izAy9VIRQzm_NrocgEPa8rlNSnmIJT4OLaY",
+        "tab": "BASE",
+        "c_start": "A1",
+        "c_end": "AU",
         "p_row": 1,
         "p_col": 1
     }
